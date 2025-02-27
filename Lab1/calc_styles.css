@@ -1,0 +1,115 @@
+
+/* опишем базовый стиль кнопки калькулятора */
+.my-btn { 
+  margin-right: 5px;           /* задаем отступ от кнопки справа */
+  margin-top: 5px;             /* задаем отступ от кнопки сверху*/
+  width: 50px;                 /* задаем ширину кнопки */
+  height: 50px;                /* задаем высоту кнопки */
+  border-radius: 50%;          /* округляем кнопку */
+          
+  background: #515151;         /* задаем серый цвет кнопки */
+  color: black;             /* задаем белый цвет текста внутри кнопки */
+  font-size: 1.5rem;           /* увеличим размер шрифта */
+  font-family: 'Courier New', Courier, monospace; /* сменим шрифт (шрифт изменен по заданию)*/
+  cursor: pointer;             /* при наведении на кнопку курсор будет изменен
+                        
+  user-select: none;           /* отключаем возможность выделить текст внутри кнопки */
+} 
+
+/* hover - это состояние элемента, когда на него наведен курсор */
+.my-btn:hover {
+  background: darkgray; /* при наведение курсора на кнопку, она будет окрашена в серый */
+}
+
+/* active - это состояние активации элемента. В случае кнопки - нажатие на нее */
+.my-btn:active {
+  filter: brightness(130%); /* увеличим интенсивность цвета для эффекта вспышки */
+}
+
+/* селектор для кнопок первостепенных операций */
+.my-btn.primary { 
+  background: #ffa500; /* цвет кнопки оранжевый */
+}
+
+/* селектор для кнопок второстепенных операций */
+.my-btn.secondary { 
+  background: #a6a6a6; /* цвет кнопки сервый */
+}
+
+/* селектор для кнопки расчета выражения (=) */
+.my-btn.execute { 
+  width: 110px;          /* сделаем кнопку шире других */
+  border-radius: 34px;   /* подкорректируем округлость */
+}
+
+/* селектор для поля вывода результата */
+.result { 
+  width: 220px;
+  height: 60px;
+  margin-bottom: 15px;         /* отступ снизу */
+  padding-right: 10px;         /* выступ справа */
+  background: black; /* цвет можно задавать и таким образом */
+  text-align: right;           /* примагнитим текст к правой стороне */
+  color: #ffffff;              /* цвет текста белый */
+  font-size: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: url('https://i.pinimg.com/originals/75/c0/5e/75c05e205b63a6c28e2c21e828b0ad91.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+}
+
+.my-btn.secondary.white{
+  
+  border-color: black;    
+}
+
+.my-btn.secondary.blue{
+  background-color:blue;
+}
+
+.my-btn.secondary.red{
+  background-color: red;
+}
+.fon{
+  position: absolute;
+  background-color:black;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-image: url('flag.jpg');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+}
+
+.my-btn.white{
+  background-color: #ffffff;
+}
+
+.my-btn.blue{
+  background-color: blue;
+}
+
+.my-btn.red{
+  background-color: red;
+}
+
+body{
+  margin: 0;
+}
+
+.Calc{
+  background-color: grey;
+  width: auto; 
+  align-items: center;
+  padding: 10px;
+  margin-left: -1%;
+  
+}
+
+.my-btn:hover{
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4); 
+    transform: scale(1.1); 
+}
