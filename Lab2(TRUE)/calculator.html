@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+  <title>Калькулятор</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="calc_styles.css">  
+  <script type="text/javascript" src="script.js"></script> 
+</head>
+
+
+<div class="calculator">
+    <div class="screen-wrapper">
+      <div id="screen" class = "screen">
+        
+        <div id="result" class = "result">0</div>
+      </div>
+    </div>
+    <table class="keys">
+      <tbody>
+        <tr>
+          <td class="red key" id="btn_op_clear">C</td>
+          <td class="gray key divide" id = "btn_sqrt">sqrt</td>
+          <td class="gray key power" id = "btn_pow">^</td>
+          <td class="gray key divide" button id="btn_op_div">/</td>
+        </tr>
+        <tr>
+          <td class="blue key" id="btn_digit_7">7</td>
+          <td class="blue key" id="btn_digit_8">8</td>
+          <td class="blue key" id="btn_digit_9"">9</td>
+          <td class="gray key" id="btn_op_mult">х</td>
+        </tr>
+        <tr>
+          <td class="blue key" id = "btn_digit_4">4</td>
+          <td class="blue key" id="btn_digit_5">5</td>
+          <td class="blue key" id="btn_digit_6">6</td>
+          <td class="gray key substract" id="btn_op_minus"  >-</td>
+        </tr>
+        <tr>
+          <td class="blue key" id="btn_digit_1">1</td>
+          <td class="blue key" id="btn_digit_2">2</td>
+          <td class="blue key" id="btn_digit_3">3</td>
+          <td class="gray key add" rowspan="2" id="btn_op_plus">+</td>
+        </tr>
+        <tr>
+          <td class="blue key" data-token="num_dot">.</td>
+          <td class="blue key" id="btn_digit_0">0</td>
+          <td class="red key" id = "btn_op_equal">=</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
