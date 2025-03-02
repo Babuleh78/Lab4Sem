@@ -45,16 +45,15 @@
   /* селектор для поля вывода результата */
   .result { 
     width: 220px;
-    height: 60px;
-    margin-bottom: 15px;         /* отступ снизу */
-    padding-right: 10px;         /* выступ справа */
-    background: black; /* цвет можно задавать и таким образом */
-    text-align: right;           /* примагнитим текст к правой стороне */
-    color: #ffffff;              /* цвет текста белый */
-    font-size: 1.5rem;
+    height: 70px;
+    margin-bottom: 15px;       
+    padding-right: 10px;     
+    text-align: right;           
+    color: #ffffff;              
+    font-size: 2rem;
     font-family: Arial, Helvetica, sans-serif;
     background-image: url('https://i.pinimg.com/originals/75/c0/5e/75c05e205b63a6c28e2c21e828b0ad91.jpg');
-    background-size: cover; 
+    background-size: 230px 70px; 
     background-repeat: no-repeat; 
   }
   
@@ -105,6 +104,7 @@
     align-items: center;
     padding: 10px;
     margin-left: -1%;
+
     
   }
   

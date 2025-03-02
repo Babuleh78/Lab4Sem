@@ -87,4 +87,39 @@ window.onload = function(){
     
         outputElement.innerHTML = a
     }
+
+
+
+
+
+
+
+    //Про дизайн
+
+    function setEvent(index){
+        const fon = document.getElementById("fon")
+        const result = document.getElementById("result")
+        const calc = document.getElementById("Calc")
+        const allBtns = document.getElementsByClassName("my-btn")
+        switch(index){
+            case 0:
+                return function(){
+                    fon.style.backgroundImage = "url(IM_back.png)"
+                    result.style.backgroundImage = "url(IM_res_back.png)"
+                    calc.style.background = "linear-gradient(to right, yellow, grey)";   
+                    for (let i = 0; i < allBtns.length; i++) {
+                        allBtns[i].style.background = "ivory"; 
+                    }
+
+                }
+          
+        }
+        
+    }
+
+    ChangeBtns = document.getElementsByClassName("ChangeStyleBtn")
+    for(let i = 0; i<ChangeBtns.length; i++){
+        btn = ChangeBtns[i]
+        btn.addEventListener("click", setEvent(i))
+    }
 };
