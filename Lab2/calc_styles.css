@@ -78,7 +78,6 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    background-image: url('flag.jpg');
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -147,4 +146,37 @@
 }
 
 
-.
+.up{
+  background-image: url("up.png"); 
+  background-position: center;
+    position: absolute;
+    background-color:black;
+    width: 100%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    top: 0;
+    z-index: 1;
+}
+
+.ChangeStyleBtn{
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+}
+
+.button-container {
+  display: flex;          
+  flex-direction: column;
+  gap: 10px;            
+  position: absolute;
+  left: 10px;
+}
+
+
