@@ -165,8 +165,8 @@
 
 .ChangeStyleBtn{
 
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 
 }
@@ -176,7 +176,22 @@
   flex-direction: column;
   gap: 10px;            
   position: absolute;
-  left: 10px;
+  left: 30px;
 }
 
+.ChangeStyleBtn.IronMaidenBtn{
+  background-image: url("eddie.png");
+  background-position: center;
+  background-size: cover; 
+}
 
+.ChangeStyleBtn.ACDCBtn{
+  background-image: url("acdc.png");
+  background-position: center;
+  background-size: cover; 
+}
+.ChangeStyleBtn.FFDPBtn{
+  background-image: url("ffdp.png");
+  background-position: center;
+  background-size: cover; 
+}
