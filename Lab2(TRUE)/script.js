@@ -90,4 +90,26 @@ window.onload = function(){
 
 
     //Бабулехово
+
+    //Смена фона
+    document.getElementById("btn_change_background").onclick = function(){
+        const background = document.getElementById("animatedBackground")
+        if(background.className == "animatedBackground floppa"){
+            background.className = "animatedBackground retrowave"
+        } else{
+            background.className = "animatedBackground floppa"
+        }
+    }
+
+    //Смена окна
+
+    document.getElementById("btn_change_window").onclick = function(){
+        const window = document.getElementById("screen")
+        if(window.className == "screen violet"){
+            window.className = "screen"
+        } else{
+            window.className = "screen violet"
+        }
+    }
+
 };

@@ -88,7 +88,7 @@ html, body {
     
     
 .animatedBackground{
-  background-image: url("retrowave.gif");
+  
   position: absolute;
     background-color:black;
     width: 100%;
@@ -99,4 +99,15 @@ html, body {
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
+}
+.animatedBackground.retrowave{
+  background-image: url("retrowave.gif");
+}
+.animatedBackground.floppa{
+  background-image: url("floppa.gif");
+}
+
+.screen.violet{
+  color: white;
+  background-image: linear-gradient(to bottom, rgb(128, 0, 128) 0%, rgb(240, 130, 240) 100%);
 }
