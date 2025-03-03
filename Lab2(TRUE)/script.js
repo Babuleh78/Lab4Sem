@@ -15,15 +15,21 @@ window.onload = function(){
     function onDigitButtonClicked(digit) {
         if (!selectedOperation) {
             if ((digit != '.') || (digit == '.' && !a.includes(digit))) { 
-                a += digit
+                if(a.length<12){
+                    a += digit
+                }
             }
             result.innerHTML = parseInt(a)
+            
         } else {
             if ((digit != '.') || (digit == '.' && !b.includes(digit))) { 
-                b += digit
+                if(b.length<12){
+                    b += digit
+                }
                 result.innerHTML = parseInt(b)   
             }
-        }
+        } 
+        
     }
     
     // устанавка колбек-функций на кнопки циферблата по событию нажатия
@@ -82,14 +88,12 @@ window.onload = function(){
         }
         
         a = expressionResult.toString()
-        b = ''
-        selectedOperation = null
+       
         if(a.includes(".")){
             result.innerHTML = parseFloat(a).toString()
         } else{
             result.innerHTML = parseInt(a)
         }
-        a = ''
     }
 
 
@@ -121,14 +125,14 @@ window.onload = function(){
         if (!selectedOperation) {
             if(a.length >1){
                  a = a.slice(0, -1)
-                result.innerHTML = parseInt(a)
+                result.innerHTML = a
             } else{
                 result.innerHTML = 0
             }
         } else {
             if (b.length>1){ 
                 b = b.slice(0, -1)
-                result.innerHTML = parseInt(b)
+                result.innerHTML = b
             } else{
                 result.innerHTML = 0
             }
@@ -155,10 +159,10 @@ window.onload = function(){
           
         if (!selectedOperation) {
             a+="000"
-            result.innerHTML = parseInt(a)
+            result.innerHTML = parseFloat(a)
         } else {
             b+="000"
-            result.innerHTML = parseInt(b)
+            result.innerHTML = parseFloat(b)
         }
     }
 
@@ -166,12 +170,12 @@ window.onload = function(){
 
     document.getElementById("btn_pow").onclick = function(){
         if (!selectedOperation) {
-            a = parseInt(a)*parseInt(a)
+            a = parseFloat(a)*parseFloat(a)
             
-            result.innerHTML = parseInt(a)
+            result.innerHTML = parseFloat(a)
         } else {
-            b = parseInt(b)*parseInt(b)
-            result.innerHTML = parseInt(b)
+            b = parseFloat(b)*parseFloat(b)
+            result.innerHTML = parseFloat(b)
         }
     }
 
@@ -230,4 +234,6 @@ window.onload = function(){
             result.innerHTML = b
         }
     }
+
+   
 };

@@ -112,3 +112,20 @@ html, body {
   color: white;
   background-image: linear-gradient(to bottom, rgb(128, 0, 128) 0%, rgb(240, 130, 240) 100%);
 }
+
+.button_group {
+  display: flex;         
+  flex-direction: column;  
+  align-items: center; 
+ 
+}
+
+.flex{
+  margin: 20px 20px;          
+  padding: 10px 20px;      
+  background-color: gray;   
+  color: white;           
+  cursor: pointer;          
+  border-radius: 5px;      
+  text-align: center;       
+}
