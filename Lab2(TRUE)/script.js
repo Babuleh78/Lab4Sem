@@ -138,14 +138,15 @@ window.onload = function(){
     //4) Процент
     document.getElementById("btn_percent").onclick = function(){
         
-        if(a!=''){
-            result.innerHTML = parseFloat(parseInt(a)/100).toString()
+        if(a!='' && !selectedOperation){
+            a = parseFloat(parseInt(a)/100).toString()
+            result.innerHTML = a
         } 
-        if(b!=''){  
-            result.innerHTML = parseFloat(parseInt(a)/100).toString()
+        else if(b!='' && selectedOperation){  
+            b =  parseFloat(parseInt(b)/100).toString()
+            result.innerHTML = b
         }
-        a = ''
-        b = ''
+       
     }
 
     //5) три нуля
@@ -158,6 +159,75 @@ window.onload = function(){
         } else {
             b+="000"
             result.innerHTML = parseInt(b)
+        }
+    }
+
+    //6) Квадрат
+
+    document.getElementById("btn_pow").onclick = function(){
+        if (!selectedOperation) {
+            a = parseInt(a)*parseInt(a)
+            
+            result.innerHTML = parseInt(a)
+        } else {
+            b = parseInt(b)*parseInt(b)
+            result.innerHTML = parseInt(b)
+        }
+    }
+
+    //7) LN
+
+    document.getElementById("btn_ln").onclick = function(){
+        if (!selectedOperation) {
+            a = parseFloat(Math.log(a)).toFixed(10).toString()
+            result.innerHTML = a
+        } else {
+            b = parseFloat(Math.log(b)).toFixed(10).toString()
+            result.innerHTML = b
+        }
+    }
+
+    //8) факториал
+
+    document.getElementById("btn_op_fact").onclick = function(){
+        function fact(n){
+            let ans = 1;
+            n = parseInt(n)
+            for(let i = 1; i<=n; i++){
+                ans*=i;
+            }
+            return ans
+        }
+        if (!selectedOperation) {
+            a = fact(parseInt(a))
+            result.innerHTML = a
+        } else {
+            b = fact(parseInt(b))
+            result.innerHTML = b
+        }
+    }
+
+    //9) +-
+
+    document.getElementById("btn_plus_minus").onclick = function(){
+        if (!selectedOperation) {
+            a = -a
+            result.innerHTML = a
+        } else {
+            b = -b
+            result.innerHTML = b
+        }
+    }
+
+    //10) квадратный корень
+
+    document.getElementById("btn_sqrt").onclick = function(){
+        if (!selectedOperation) {
+            a = parseFloat(Math.sqrt(a).toFixed(10)).toString()
+            result.innerHTML = a
+        } else {
+            b = parseFloat(Math.sqrt(b).toFixed(10)).toString()
+            result.innerHTML = b
         }
     }
 };
