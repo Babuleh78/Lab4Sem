@@ -7,7 +7,7 @@ window.onload = function(){
     let selectedOperation = null
     
     // окно вывода результата
-    outputElement = document.getElementById("result")
+    result = document.getElementById("result")
     
     // список объектов кнопок циферблата (id которых начинается с btn_digit_)
     digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]')
@@ -17,11 +17,11 @@ window.onload = function(){
             if ((digit != '.') || (digit == '.' && !a.includes(digit))) { 
                 a += digit
             }
-            outputElement.innerHTML = a
+            result.innerHTML = parseInt(a)
         } else {
             if ((digit != '.') || (digit == '.' && !b.includes(digit))) { 
                 b += digit
-                outputElement.innerHTML = b        
+                result.innerHTML = parseInt(b)   
             }
         }
     }
@@ -58,7 +58,7 @@ window.onload = function(){
         b = ''
         selectedOperation = ''
         expressionResult = ''
-        outputElement.innerHTML = 0
+        result.innerHTML = 0
     }
     
     // кнопка расчёта результата
@@ -84,14 +84,18 @@ window.onload = function(){
         a = expressionResult.toString()
         b = ''
         selectedOperation = null
-    
-        outputElement.innerHTML = a
+        if(a.includes(".")){
+            result.innerHTML = parseFloat(a).toString()
+        } else{
+            result.innerHTML = parseInt(a)
+        }
+        a = ''
     }
 
 
     //Бабулехово
 
-    //Смена фона
+    //1)Смена фона
     document.getElementById("btn_change_background").onclick = function(){
         const background = document.getElementById("animatedBackground")
         if(background.className == "animatedBackground floppa"){
@@ -101,7 +105,7 @@ window.onload = function(){
         }
     }
 
-    //Смена окна
+    //2)Смена окна
 
     document.getElementById("btn_change_window").onclick = function(){
         const window = document.getElementById("screen")
@@ -112,4 +116,48 @@ window.onload = function(){
         }
     }
 
+    //3)Стирание одного символа
+    document.getElementById("btn_DEL").onclick = function(){
+        if (!selectedOperation) {
+            if(a.length >1){
+                 a = a.slice(0, -1)
+                result.innerHTML = parseInt(a)
+            } else{
+                result.innerHTML = 0
+            }
+        } else {
+            if (b.length>1){ 
+                b = b.slice(0, -1)
+                result.innerHTML = parseInt(b)
+            } else{
+                result.innerHTML = 0
+            }
+        }
+    }
+
+    //4) Процент
+    document.getElementById("btn_percent").onclick = function(){
+        
+        if(a!=''){
+            result.innerHTML = parseFloat(parseInt(a)/100).toString()
+        } 
+        if(b!=''){  
+            result.innerHTML = parseFloat(parseInt(a)/100).toString()
+        }
+        a = ''
+        b = ''
+    }
+
+    //5) три нуля
+
+    document.getElementById("btn_tri_plus").onclick = function(){
+          
+        if (!selectedOperation) {
+            a+="000"
+            result.innerHTML = parseInt(a)
+        } else {
+            b+="000"
+            result.innerHTML = parseInt(b)
+        }
+    }
 };
