@@ -121,7 +121,7 @@ window.onload = function(){
     }
 
     //3)Стирание одного символа
-    document.getElementById("btn_DEL").onclick = function(){
+    function del_symb(){
         if (!selectedOperation) {
             if(a.length >1){
                  a = a.slice(0, -1)
@@ -137,6 +137,9 @@ window.onload = function(){
                 result.innerHTML = 0
             }
         }
+    }
+    document.getElementById("btn_DEL").onclick = function(){
+        del_symb()
     }
 
     //4) Процент
@@ -235,5 +238,39 @@ window.onload = function(){
         }
     }
 
+   //Нажатие кнопок
+
    
+    function handleKeyPress(event) {
+    if (event.key === "Shift" || event.key === "Control") {
+        return;
+    }
+        const key = event.key
+        console.log(key)
+        if(parseInt(key) >=0 && parseInt(key)<10){
+
+            onDigitButtonClicked(key)
+        }
+        if(key == "Backspace"){
+            del_symb()
+        }
+        if(key == "+"){
+             if (a === '') return
+            selectedOperation = '+'
+        }
+        if(key == "-"){
+             if (a === '') return
+            selectedOperation = '-'
+        }
+        if(key =="/"){
+             if (a === '') return
+            electedOperation = '/'
+        }
+        if(key =="x" || key == "ч"){
+             if (a === '') return
+            selectedOperation = 'x'
+        }
+        console.log(key)
+   }
+   document.addEventListener('keydown', handleKeyPress);
 };
