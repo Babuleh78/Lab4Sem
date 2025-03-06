@@ -8,7 +8,7 @@ window.onload = function(){
     
     // окно вывода результата
     result = document.getElementById("result")
-    
+    hist = document.getElementById("hist")
     // список объектов кнопок циферблата (id которых начинается с btn_digit_)
     digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]')
     
@@ -20,13 +20,15 @@ window.onload = function(){
                 }
             }
             result.innerHTML = parseInt(a)
+            hist.textContent += digit.toString()
             
         } else {
             if ((digit != '.') || (digit == '.' && !b.includes(digit))) { 
                 if(b.length<12){
                     b += digit
                 }
-                result.innerHTML = parseInt(b)   
+                result.innerHTML = parseInt(b)  
+                hist.textContent += digit.toString() 
             }
         } 
         
@@ -44,18 +46,22 @@ window.onload = function(){
     document.getElementById("btn_op_mult").onclick = function() { 
         if (a === '') return
         selectedOperation = 'x'
+        hist+='x'
     }
     document.getElementById("btn_op_plus").onclick = function() { 
         if (a === '') return
         selectedOperation = '+'
+        hist+='+'
     }
     document.getElementById("btn_op_minus").onclick = function() { 
         if (a === '') return
         selectedOperation = '-'
+        hist+='-'
     }
     document.getElementById("btn_op_div").onclick = function() { 
         if (a === '') return
         selectedOperation = '/'
+        hist+='/'
     }
     
     // кнопка очищения
@@ -65,6 +71,7 @@ window.onload = function(){
         selectedOperation = ''
         expressionResult = ''
         result.innerHTML = 0
+        hist.textContent = ''
     }
     
     // кнопка расчёта результата
@@ -130,6 +137,7 @@ window.onload = function(){
             if(a.length >1){
                  a = a.slice(0, -1)
                 result.innerHTML = a
+                hist.textContent = hist.textContent.slice(0, -1)
             } else{
                 result.innerHTML = 0
             }
@@ -137,6 +145,7 @@ window.onload = function(){
             if (b.length>1){ 
                 b = b.slice(0, -1)
                 result.innerHTML = b
+                hist.textContent = hist.textContent.slice(0, -1)
             } else{
                 result.innerHTML = 0
             }
@@ -263,23 +272,26 @@ window.onload = function(){
             event.preventDefault();
              if (a === '') return
             selectedOperation = '+'
+            hist.textContent+='+'
         }
         if(key == "-"){
             event.preventDefault();
              if (a === '') return
             selectedOperation = '-'
+            hist.textContent+='-'
         }
         if((key =="/" || key == ".")){
             event.preventDefault();
             if (a === '') return
             selectedOperation = '/'
-            console.log("Операция ", selectedOperation)
+            hist.textContent+='/'
             
         }
         if(key =="x" || key == "ч"){
             event.preventDefault();
              if (a === '') return
             selectedOperation = 'x'
+            hist.textContent+='x'
         }
         if(key == "=" || key == "Enter"){
             do_operation()
