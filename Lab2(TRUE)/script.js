@@ -68,7 +68,8 @@ window.onload = function(){
     }
     
     // кнопка расчёта результата
-    document.getElementById("btn_op_equal").onclick = function() { 
+
+    function do_operation(){
         if (a === '' || b === '' || !selectedOperation)
             return
             
@@ -94,6 +95,9 @@ window.onload = function(){
         } else{
             result.innerHTML = parseInt(a)
         }
+    }
+    document.getElementById("btn_op_equal").onclick = function() { 
+        do_operation()
     }
 
 
@@ -247,6 +251,7 @@ window.onload = function(){
     }
         const key = event.key
         console.log(key)
+        const isShiftPressed = event.shiftKey;
         if(parseInt(key) >=0 && parseInt(key)<10){
 
             onDigitButtonClicked(key)
@@ -254,23 +259,31 @@ window.onload = function(){
         if(key == "Backspace"){
             del_symb()
         }
-        if(key == "+"){
+        if(key == "+" && isShiftPressed){
+            event.preventDefault();
              if (a === '') return
             selectedOperation = '+'
         }
         if(key == "-"){
+            event.preventDefault();
              if (a === '') return
             selectedOperation = '-'
         }
-        if(key =="/"){
-             if (a === '') return
-            electedOperation = '/'
+        if((key =="/" || key == ".")){
+            event.preventDefault();
+            if (a === '') return
+            selectedOperation = '/'
+            console.log("Операция ", selectedOperation)
+            
         }
         if(key =="x" || key == "ч"){
+            event.preventDefault();
              if (a === '') return
             selectedOperation = 'x'
         }
-        console.log(key)
+        if(key == "=" || key == "Enter"){
+            do_operation()
+        }
    }
    document.addEventListener('keydown', handleKeyPress);
 };
