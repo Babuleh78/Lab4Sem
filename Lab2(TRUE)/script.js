@@ -22,6 +22,7 @@ window.onload = function(){
         
     }
     
+    
     // устанавка колбек-функций на кнопки циферблата по событию нажатия
     digitButtons.forEach(button => {
         button.onclick = function() {
@@ -52,6 +53,10 @@ window.onload = function(){
         a = ''
     }
     
+    document.getElementById("point_btn").onclick = function(){
+        hist.textContent+="."
+        result.textContent+="."
+    }
     // кнопка очищения
     document.getElementById("btn_op_clear").onclick = function() { 
         a = ''
@@ -62,7 +67,9 @@ window.onload = function(){
     // кнопка расчёта результата
 
     function do_operation(){
-        result.textContent = eval(hist.textContent);
+        let promez_res = parseFloat(eval(hist.textContent).toFixed(4)).toString()
+        result.textContent = promez_res
+        hist.textContent = promez_res
     }
     document.getElementById("btn_op_equal").onclick = function() { 
         do_operation()
@@ -108,10 +115,12 @@ window.onload = function(){
         if(a!='' && !selectedOperation){
             a = parseFloat(parseInt(a)/100).toString()
             result.innerHTML = a
+            hist.textContent = a
         } 
         else if(b!='' && selectedOperation){  
             b =  parseFloat(parseInt(b)/100).toString()
             result.innerHTML = b
+            hist.textContent = b
         }
        
     }
@@ -123,9 +132,11 @@ window.onload = function(){
         if (!selectedOperation) {
             a+="000"
             result.innerHTML = parseFloat(a)
+            hist.textContent = a
         } else {
             b+="000"
             result.innerHTML = parseFloat(b)
+            hist.textContent = b
         }
     }
 
@@ -137,20 +148,18 @@ window.onload = function(){
             a = parseFloat(a)*parseFloat(a)
             
             result.textContent = parseFloat(a)
-            
+            hist.textContent = a
         }
     }
 
     //7) LN
 
     document.getElementById("btn_ln").onclick = function(){
-        if (!selectedOperation) {
-            a = parseFloat(Math.log(a)).toFixed(10).toString()
+        
+            a = parseFloat(Math.log(a)).toFixed(4).toString()
             result.innerHTML = a
-        } else {
-            b = parseFloat(Math.log(b)).toFixed(10).toString()
-            result.innerHTML = b
-        }
+            hist.textContent = a
+        
     }
 
     //8) факториал
@@ -163,38 +172,28 @@ window.onload = function(){
                 ans*=i;
             }
             return ans
-        }
-        if (!selectedOperation) {
+        } 
             a = fact(parseInt(a))
             result.innerHTML = a
-        } else {
-            b = fact(parseInt(b))
-            result.innerHTML = b
-        }
+            hist.textContent = a
+       
     }
 
     //9) +-
 
     document.getElementById("btn_plus_minus").onclick = function(){
-        if (!selectedOperation) {
+     
             a = -a
             result.innerHTML = a
-        } else {
-            b = -b
-            result.innerHTML = b
-        }
+           
     }
 
     //10) квадратный корень
 
     document.getElementById("btn_sqrt").onclick = function(){
-        if (!selectedOperation) {
-            a = parseFloat(Math.sqrt(a).toFixed(10)).toString()
+            a = parseFloat(Math.sqrt(a).toFixed(4)).toString()
             result.innerHTML = a
-        } else {
-            b = parseFloat(Math.sqrt(b).toFixed(10)).toString()
-            result.innerHTML = b
-        }
+            hist.textContent = a
     }
 
    //Нажатие кнопок
@@ -238,6 +237,10 @@ window.onload = function(){
             hist.textContent+='*'
             result.textContent = '?'
             a = ''
+        }
+        if(key == "." || (key == "ю" && isShiftPressed)){
+             hist.textContent+="."
+            result.textContent+="."
         }
         if(key == "=" || key == "Enter"){
             do_operation()

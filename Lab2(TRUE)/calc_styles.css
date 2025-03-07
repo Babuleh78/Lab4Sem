@@ -32,7 +32,8 @@ html, body {
   }
   
   .screen {
-      height: 70px;
+      min-height: 70px;
+      display: block;
       background-image: linear-gradient(to bottom, rgb(255, 200, 0) 0%, rgb(255, 200, 110) 100%);
       padding: 8px 5px;
   }
