@@ -1,11 +1,9 @@
 // файл script.js
 window.onload = function(){ 
 
-    let a = ''
-    let b = ''
-    let expressionResult = ''
+   
     let selectedOperation = null
-    
+    let a = ''
     // окно вывода результата
     result = document.getElementById("result")
     hist = document.getElementById("hist")
@@ -13,24 +11,14 @@ window.onload = function(){
     digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]')
     
     function onDigitButtonClicked(digit) {
-        if (!selectedOperation) {
-            if ((digit != '.') || (digit == '.' && !a.includes(digit))) { 
-                if(a.length<12){
-                    a += digit
-                }
-            }
-            result.innerHTML = parseInt(a)
-            hist.textContent += digit.toString()
-            
-        } else {
-            if ((digit != '.') || (digit == '.' && !b.includes(digit))) { 
-                if(b.length<12){
-                    b += digit
-                }
-                result.innerHTML = parseInt(b)  
-                hist.textContent += digit.toString() 
-            }
-        } 
+        if(a.length<9){
+            hist.textContent+=digit
+            a+=digit
+            if(result.textContent=="?"){
+                result.textContent=""
+            }   
+            result.textContent+=digit
+        }
         
     }
     
@@ -44,64 +32,37 @@ window.onload = function(){
     
     // установка колбек-функций для кнопок операций
     document.getElementById("btn_op_mult").onclick = function() { 
-        if (a === '') return
-        selectedOperation = 'x'
-        hist+='x'
+         hist.textContent+='*'
+         result.textContent = '?'
+         a = ''
     }
     document.getElementById("btn_op_plus").onclick = function() { 
-        if (a === '') return
-        selectedOperation = '+'
-        hist+='+'
+        hist.textContent+='+'
+         result.textContent = '?'
+         a = ''
     }
     document.getElementById("btn_op_minus").onclick = function() { 
-        if (a === '') return
-        selectedOperation = '-'
-        hist+='-'
+         hist.textContent+='-'
+          result.textContent = '?'
+        a =''
     }
     document.getElementById("btn_op_div").onclick = function() { 
-        if (a === '') return
-        selectedOperation = '/'
-        hist+='/'
+         hist.textContent+='/'
+          result.textContent = '?'
+        a = ''
     }
     
     // кнопка очищения
     document.getElementById("btn_op_clear").onclick = function() { 
         a = ''
-        b = ''
-        selectedOperation = ''
-        expressionResult = ''
-        result.innerHTML = 0
+        result.innerHTML = '?'
         hist.textContent = ''
     }
     
     // кнопка расчёта результата
 
     function do_operation(){
-        if (a === '' || b === '' || !selectedOperation)
-            return
-            
-        switch(selectedOperation) { 
-            case 'x':
-                expressionResult = (+a) * (+b)
-                break;
-            case '+':
-                expressionResult = (+a) + (+b)
-                break;
-            case '-':
-                expressionResult = (+a) - (+b)
-                break;
-            case '/':
-                expressionResult = (+a) / (+b)
-                break;
-        }
-        
-        a = expressionResult.toString()
-       
-        if(a.includes(".")){
-            result.innerHTML = parseFloat(a).toString()
-        } else{
-            result.innerHTML = parseInt(a)
-        }
+        result.textContent = eval(hist.textContent);
     }
     document.getElementById("btn_op_equal").onclick = function() { 
         do_operation()
@@ -133,23 +94,9 @@ window.onload = function(){
 
     //3)Стирание одного символа
     function del_symb(){
-        if (!selectedOperation) {
-            if(a.length >1){
-                 a = a.slice(0, -1)
-                result.innerHTML = a
-                hist.textContent = hist.textContent.slice(0, -1)
-            } else{
-                result.innerHTML = 0
-            }
-        } else {
-            if (b.length>1){ 
-                b = b.slice(0, -1)
-                result.innerHTML = b
-                hist.textContent = hist.textContent.slice(0, -1)
-            } else{
-                result.innerHTML = 0
-            }
-        }
+        result.textContent = result.textContent.slice(0, -1)
+        hist.textContent = hist.textContent.slice(0, -1)
+        a = a.slice(0, -1   )
     }
     document.getElementById("btn_DEL").onclick = function(){
         del_symb()
@@ -186,12 +133,11 @@ window.onload = function(){
 
     document.getElementById("btn_pow").onclick = function(){
         if (!selectedOperation) {
+            a = eval(hist.textContent)
             a = parseFloat(a)*parseFloat(a)
             
-            result.innerHTML = parseFloat(a)
-        } else {
-            b = parseFloat(b)*parseFloat(b)
-            result.innerHTML = parseFloat(b)
+            result.textContent = parseFloat(a)
+            
         }
     }
 
@@ -270,28 +216,28 @@ window.onload = function(){
         }
         if(key == "+" && isShiftPressed){
             event.preventDefault();
-             if (a === '') return
-            selectedOperation = '+'
             hist.textContent+='+'
+            result.textContent = '?'
+            a = ''
         }
         if(key == "-"){
             event.preventDefault();
-             if (a === '') return
-            selectedOperation = '-'
             hist.textContent+='-'
+            result.textContent = '?'
+            a = ''
         }
         if((key =="/" || key == ".")){
             event.preventDefault();
-            if (a === '') return
-            selectedOperation = '/'
             hist.textContent+='/'
+            result.textContent = '?'
+            a = ''
             
         }
-        if(key =="x" || key == "ч"){
+        if(key =="*"){
             event.preventDefault();
-             if (a === '') return
-            selectedOperation = 'x'
-            hist.textContent+='x'
+            hist.textContent+='*'
+            result.textContent = '?'
+            a = ''
         }
         if(key == "=" || key == "Enter"){
             do_operation()
