@@ -155,7 +155,7 @@ window.onload = function(){
     //7) LN
 
     document.getElementById("btn_ln").onclick = function(){
-        
+            a = eval(hist.textContent)
             a = parseFloat(Math.log(a)).toFixed(4).toString()
             result.innerHTML = a
             hist.textContent = a
@@ -173,6 +173,7 @@ window.onload = function(){
             }
             return ans
         } 
+            a = eval(hist.textContent)
             a = fact(parseInt(a))
             result.innerHTML = a
             hist.textContent = a
