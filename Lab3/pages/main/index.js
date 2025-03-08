@@ -10,51 +10,62 @@ export class MainPage {
         return document.getElementById('main-page')
     }
     getHTML() {
-        return (
-            `
-                <div id="main-page" class="d-flex flex-wrap"><div/>
-            `
-        )
+        return `
+            <div id="main-page" class="carousel carousel-dark slide"  data-bs-ride="carousel">
+           
+                <div class="carousel-inner" id="carousel-inner">
+
+                </div>
+               <button class="carousel-control-prev" type="button" data-bs-target="#main-page"  data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Предыдущий</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#main-page"  data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Следующий</span>
+            </button>
+            </div>
+        `;
     }
-    getData() {
-        return [
-            {
-                id: 1,
-                src: "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-                title: "Акция",
-                text: "Такой акции вы еще не видели 1"
-            },
-            {
-                id: 2,
-                src: "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-                title: "Акция",
-                text: "Такой акции вы еще не видели 2"
-            },
-            {
-                id: 3,
-                src: "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-                title: "Акция",
-                text: "Такой акции вы еще не видели 3"
-            },
-        ]
+    async getData() {
+        try {
+            const response = await fetch('https://api.nasa.gov/planetary/apod?api_key=gah9iauF775wOOWMqLQXMcVZUHPeIbOamzHqSOpp&count=3'); 
+            if (!response.ok) {
+                throw new Error('Сеть ответила с ошибкой');
+             }
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     }
     
     clickCard(e) {
+
         const cardId = e.target.dataset.id
-    
+        
         const productPage = new ProductPage(this.parent, cardId)
         productPage.render()
     } 
-    render() {
+    async render() {
+
+        function getFirstTwoSentences(text) {
+            const sentences = text.split(/(?<=[.!?])\s+/);
+            return sentences.slice(0, 2).join(' '); 
+        }
+        
         this.parent.innerHTML = ''
         const html = this.getHTML()
         this.parent.insertAdjacentHTML('beforeend', html)
-        
-        const data = this.getData()
-        data.forEach((item) => {
-            
-            const productCard = new ProductCardComponent(this.pageRoot)
-            productCard.render(item, this.clickCard.bind(this))
-        })
+        const carouselInner = document.getElementById('carousel-inner');
+        const data = await this.getData()
+ 
+        for(let i = 0; i<Object.keys(data).length; i++){
+            const item = data[i]
+            item.explanation = getFirstTwoSentences(item.explanation)
+            console.log(item)
+            const productCard = new ProductCardComponent(carouselInner)
+            productCard.render(item, i, this.clickCard.bind(this))
+        }
     }
 }
