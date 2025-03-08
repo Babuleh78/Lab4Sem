@@ -40,12 +40,12 @@ export class MainPage {
         }
     }
     
-    clickCard(e) {
+    clickCard(item, e) {
 
         const cardId = e.target.dataset.id
         
         const productPage = new ProductPage(this.parent, cardId)
-        productPage.render()
+        productPage.render(item)
     } 
     async render() {
 
@@ -62,10 +62,11 @@ export class MainPage {
  
         for(let i = 0; i<Object.keys(data).length; i++){
             const item = data[i]
+            item.copyright = item.explanation
             item.explanation = getFirstTwoSentences(item.explanation)
             console.log(item)
             const productCard = new ProductCardComponent(carouselInner)
-            productCard.render(item, i, this.clickCard.bind(this))
+            productCard.render(item, i, this.clickCard.bind(this, item))
         }
     }
 }
