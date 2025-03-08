@@ -64,7 +64,7 @@ export class MainPage {
             const item = data[i]
             item.copyright = item.explanation
             item.explanation = getFirstTwoSentences(item.explanation)
-            console.log(item)
+        
             const productCard = new ProductCardComponent(carouselInner)
             productCard.render(item, i, this.clickCard.bind(this, item))
         }
