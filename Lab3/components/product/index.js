@@ -1,3 +1,4 @@
+
 export class ProductComponent {
     constructor(parent) {
         this.parent = parent

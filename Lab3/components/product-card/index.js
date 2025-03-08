@@ -1,3 +1,4 @@
+import {ProductComponent} from "../../components/product/index.js";
 
 export class ProductCardComponent {
     constructor(parent) {
@@ -23,6 +24,8 @@ export class ProductCardComponent {
             .getElementById(`click-card-${data.id}`)
             .addEventListener("click", listener)
     }
+
+
     render(data, listener) {
         const html = this.getHTML(data)
         this.parent.insertAdjacentHTML('beforeend', html)
