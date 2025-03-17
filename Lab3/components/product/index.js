@@ -17,9 +17,10 @@ export class ProductComponent {
                     <div class="card-body">
                         <h5 class="card-title">${data.title}</h5>
                         <p class="card-text">${data.copyright}</p>
-                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Фотография была сделана ${data.date}">
+                        <button id = "popover" type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Фотография была сделана ${data.date}">
   Когда была сделана фотография?
 </button>
+
                     </div>
                 </div>
             </div>

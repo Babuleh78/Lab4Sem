@@ -11,7 +11,7 @@ export class MainPage {
     }
     getHTML() {
         return `
-            <div id="main-page" class="carousel carousel-dark slide"  data-bs-ride="carousel">
+            <div id="main-page" class="carousel slide"  data-bs-ride="carousel">
            
                 <div class="carousel-inner" id="carousel-inner">
 
@@ -43,9 +43,12 @@ export class MainPage {
     clickCard(item, e) {
 
         const cardId = e.target.dataset.id
-        
+        console.log("Шашура");
+
+       
         const productPage = new ProductPage(this.parent, cardId)
         productPage.render(item)
+
     } 
     async render() {
 

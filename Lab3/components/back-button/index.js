@@ -13,6 +13,7 @@ export class BackButtonComponent {
         return (
             `
                 <button id="back-button" class="btn btn-primary" type="button">Назад</button>
+               
             `
         )
     }
@@ -21,5 +22,6 @@ export class BackButtonComponent {
         const html = this.getHTML()
         this.parent.insertAdjacentHTML('beforeend', html)
         this.addListeners(listener)
+
     }
 }
