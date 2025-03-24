@@ -43,7 +43,6 @@ export class MainPage {
     clickCard(item, e) {
 
         const cardId = e.target.dataset.id
-        console.log("Шашура");
 
        
         const productPage = new ProductPage(this.parent, cardId)
@@ -51,6 +50,7 @@ export class MainPage {
 
     } 
     async render() {
+        const Texts = ["Мне показалось, что 3 поля мало", "Этот текст уникальный для каждой фотки", "Честно"]; 
 
         function getFirstTwoSentences(text) {
             const sentences = text.split(/(?<=[.!?])\s+/);
@@ -64,7 +64,10 @@ export class MainPage {
         const data = await this.getData()
  
         for(let i = 0; i<Object.keys(data).length; i++){
+    
             const item = data[i]
+           
+            item.babuflex = Texts[i]
             item.copyright = item.explanation
             item.explanation = getFirstTwoSentences(item.explanation)
         

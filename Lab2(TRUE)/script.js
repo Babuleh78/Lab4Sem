@@ -112,16 +112,11 @@ window.onload = function(){
     //4) Процент
     document.getElementById("btn_percent").onclick = function(){
         
-        if(a!='' && !selectedOperation){
+        a = eval(hist.textContent)
             a = parseFloat(parseInt(a)/100).toString()
             result.innerHTML = a
             hist.textContent = a
-        } 
-        else if(b!='' && selectedOperation){  
-            b =  parseFloat(parseInt(b)/100).toString()
-            result.innerHTML = b
-            hist.textContent = b
-        }
+      
        
     }
 
@@ -129,27 +124,23 @@ window.onload = function(){
 
     document.getElementById("btn_tri_plus").onclick = function(){
           
-        if (!selectedOperation) {
+        a = eval(hist.textContent)
             a+="000"
             result.innerHTML = parseFloat(a)
             hist.textContent = a
-        } else {
-            b+="000"
-            result.innerHTML = parseFloat(b)
-            hist.textContent = b
-        }
+        
     }
 
     //6) Квадрат
 
     document.getElementById("btn_pow").onclick = function(){
-        if (!selectedOperation) {
+        
             a = eval(hist.textContent)
             a = parseFloat(a)*parseFloat(a)
             
             result.textContent = parseFloat(a)
             hist.textContent = a
-        }
+        
     }
 
     //7) LN
@@ -192,6 +183,7 @@ window.onload = function(){
     //10) квадратный корень
 
     document.getElementById("btn_sqrt").onclick = function(){
+            a = eval(hist.textContent)
             a = parseFloat(Math.sqrt(a).toFixed(4)).toString()
             result.innerHTML = a
             hist.textContent = a
@@ -205,7 +197,6 @@ window.onload = function(){
         return;
     }
         const key = event.key
-        console.log(key)
         const isShiftPressed = event.shiftKey;
         if(parseInt(key) >=0 && parseInt(key)<10){
 

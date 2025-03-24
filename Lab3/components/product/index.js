@@ -1,38 +1,41 @@
+import { AccordionElement } from "../accordion/index.js";
 
 export class ProductComponent {
     constructor(parent) {
-        this.parent = parent
+        this.parent = parent;
     }
 
     getHTML(data) {
-        return (
-            `
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="${data.url}" class="img-fluid" alt="картинка">
-                </div>
-                
-                <div class="col-md-8 d-flex flex-column justify-content-center">
-                
-                    <div class="card-body">
-                        <h5 class="card-title">${data.title}</h5>
-                        <p class="card-text">${data.copyright}</p>
-                        <button id = "popover" type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Фотография была сделана ${data.date}">
-  Когда была сделана фотография?
-</button>
-
-                    </div>
+        return `
+        <div class="row">
+            <div class="col-md-4">
+                <img src="${data.url}" class="img-fluid" alt="картинка">
+            </div>
+            <div class="col-md-8">
+                <div class="accordion" id="accordionExample">
+                    <!-- Аккордеоны будут добавлены здесь -->
                 </div>
             </div>
-        `
-        )
+        </div>
+        `;
     }
 
     render(data) {
-        const html = this.getHTML(data)
-        this.parent.insertAdjacentHTML('beforeend', html)
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-   
+        const html = this.getHTML(data);
+        this.parent.insertAdjacentHTML('beforeend', html);
+    
+        const accordionContainer = this.parent.querySelector('#accordionExample');
+        
+        const accordionItems = [
+            { title: "Title", content: data.title || "No title available", id: "title"},
+            { title: "Shooting date", content: data.date || "Date not specified", id: "date" },
+            { title: "Info", content: data.copyright || "No information available", id: "info" },
+            { title: "Anything else", content: data.babuflex || "No information available", id: "stuff" }
+        ];
+    
+        accordionItems.forEach(item => {
+            const accordion = new AccordionElement(accordionContainer);
+            accordion.render(item);
+        });
     }
 }

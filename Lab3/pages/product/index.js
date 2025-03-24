@@ -23,21 +23,15 @@ export class ProductPage {
     
     clickBack() {
         var del = document.getElementsByClassName("popover bs-popover-auto fade show")
-        console.log(del)
+    
         del.id = "del"
-        console.log(del)
+       
         for (var i = 0; i <del.length; i++) {
-            // Устанавливаем id для каждого элемента
-            del[i].id = "del" + i; // Создаем уникальный id для каждого элемента
-        
-            // Удаляем элемент
+            del[i].id = "del" + i; 
             del[i].remove();
         }
         
-    
-      
-        //   popoverInstance.dispose();
-        
+
         const mainPage = new MainPage(this.parent)
         mainPage.render()
     }
