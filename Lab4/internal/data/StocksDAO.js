@@ -12,9 +12,10 @@ class StockDAO {
     static _validateId(id) {
 
         const numberId = Number.parseInt(id);
+
         if (Number.isNaN(numberId)) {
             
-            throw new Error('invalidate id ' + id + numberId + "Да, это последний уровень");
+            throw new Error('invalidate id (Сам ты Лёва, инвалид)');
         }
     }
 
@@ -42,10 +43,8 @@ class StockDAO {
 
     static findById(id) {
         this._validateId(id);
-
         const stocks = StocksRepository.read();
-        const stock = stocks.find((s) => s.id === id);
-
+        const stock = stocks.find((s) => s.id == id);
         return new this(stock.id, stock.date, stock.explanation, stock.title, stock.url);
     }
 
@@ -60,9 +59,8 @@ class StockDAO {
 
     static delete(id) {
         this._validateId(id);
-
         const stocks = StocksRepository.read();
-        const filteredStocks = stocks.filter((s) => s.id !== id);
+        const filteredStocks = stocks.filter((s) => s.id != id);
 
         StocksRepository.write(filteredStocks);
 

@@ -13,9 +13,9 @@ class StocksController {
     static findStockById(req, res) {
         try {
             const id = Number.parseInt(req.params.id);
-            res.send(StocksService.findStocks(id))
+            res.send(StocksService.findStocks(id));
         } catch (err) {
-            res.status(400).send({status: 'Bad Request', message: err.message})
+            res.status(400).send({status: 'Bad Request', message: err.message + "SC"})
         }
     }
 

@@ -3,6 +3,7 @@ const {StockDAO} = require('./StocksDAO');
 class StocksService {
     static findStocks(id) {
         if (id !== undefined) {
+           
             return StockDAO.findById(id).toJSON();
         }
 
