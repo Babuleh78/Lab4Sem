@@ -29,6 +29,7 @@ class StocksController {
 
     static deleteStock(req, res) {
         try {
+            
             const id = Number.parseInt(req.params.id);
             res.send(StocksService.deleteStock(id));
         } catch (err) {

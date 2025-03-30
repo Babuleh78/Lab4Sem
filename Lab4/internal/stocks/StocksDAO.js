@@ -1,26 +1,30 @@
 const {StocksRepository} = require('./StocksRepository');
 
 class StockDAO {
-    constructor(id, src, title, text) {
+    constructor(id, date, explanation, title, url) {
         this.id = id;
-        this.src = src;
+        this.date = date;
+        this.explanation = explanation;
         this.title = title;
-        this.text = text;
+        this.url = url;
     }
 
     static _validateId(id) {
+
         const numberId = Number.parseInt(id);
         if (Number.isNaN(numberId)) {
-            throw new Error('invalidate id');
+            
+            throw new Error('invalidate id ' + id + numberId + "Да, это последний уровень");
         }
     }
 
     static _validate(stock) {
         if (
             stock.id === undefined ||
-            stock.src === undefined ||
+            stock.date=== undefined ||
+            stock.explanation === undefined ||
             stock.title === undefined ||
-            stock.text === undefined
+            stock.url === undefined
         ) {
             throw new Error('invalidate stock data');
         }
@@ -31,8 +35,8 @@ class StockDAO {
     static find() {
         const stocks = StocksRepository.read();
 
-        return stocks.map(({id, src, title, text}) => {
-            return new this(id, src, title, text);
+        return stocks.map(({id, date,  explanation, title, url}) => {
+            return new this(id,date, explanation, title, url);
         });
     }
 
@@ -42,7 +46,7 @@ class StockDAO {
         const stocks = StocksRepository.read();
         const stock = stocks.find((s) => s.id === id);
 
-        return new this(stock.id, stock.src, stock.title, stock.text);
+        return new this(stock.id, stock.date, stock.explanation, stock.title, stock.url);
     }
 
     static insert(stock) {
@@ -51,7 +55,7 @@ class StockDAO {
         const stocks = StocksRepository.read();
         StocksRepository.write([...stocks, stock]);
 
-        return new this(stock.id, stock.src, stock.title, stock.text);
+        return new this(stock.id, stock.date, stock.explanation, stock.title, stock.url);
     }
 
     static delete(id) {
@@ -62,17 +66,18 @@ class StockDAO {
 
         StocksRepository.write(filteredStocks);
 
-        return filteredStocks.map(({id, src, title, text}) => {
-            return new this(id, src, title, text);
+        return filteredStocks.map(({id, date, explanation, title, url}) => {
+            return new this(id, date, explanation, title, url);
         });
     }
 
     toJSON() {
         return {
             id: this.id,
-            src: this.src,
+            date: this.date,
+            explanation: this.explanation,
             title: this.title,
-            text: this.text,
+            url: this.url
         }
     }
 }
