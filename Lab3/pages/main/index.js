@@ -32,16 +32,17 @@ export class MainPage {
     }
     async getData() {
         try {
-            
-            const response = await fetch('data.json');
+            const response = await fetch('http://localhost:8000/data/get'); // Изменил URL
             if (!response.ok) {
-              throw new Error('Ошибка загрузки файла');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            return data
-          } catch (error) {
-            console.error('Ошибка:', error);
-          }
+            console.log(data)
+            return data;
+        } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            throw error; // Пробрасываем ошибку дальше для обработки в вызывающем коде
+        }
     }
     
     clickCard(item, e) {
