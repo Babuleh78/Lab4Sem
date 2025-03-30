@@ -1,7 +1,7 @@
 const {DBConnector} = require('../../modules/DBConnector');
 
 class StocksRepository {
-    static db = new DBConnector('data.json');
+    static db = new DBConnector('..\\..\\Lab3\\data.json');
 
     static read() {
         const file = this.db.readFile();

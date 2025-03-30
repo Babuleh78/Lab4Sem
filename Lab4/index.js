@@ -1,6 +1,6 @@
 const express = require('express');
 
-const stocks = require('./internal/stocks');
+const stocks = require('./internal/data');
 
 
 const app = express();
