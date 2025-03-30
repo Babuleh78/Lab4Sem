@@ -1,6 +1,9 @@
 import {ProductCardComponent} from "../../components/product-card/index.js";
 
 import {ProductPage} from "../product/index.js";
+
+
+
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
@@ -29,15 +32,16 @@ export class MainPage {
     }
     async getData() {
         try {
-            const response = await fetch('https://api.nasa.gov/planetary/apod?api_key=gah9iauF775wOOWMqLQXMcVZUHPeIbOamzHqSOpp&count=3'); 
+            
+            const response = await fetch('data.json');
             if (!response.ok) {
-                throw new Error('Сеть ответила с ошибкой');
-             }
+              throw new Error('Ошибка загрузки файла');
+            }
             const data = await response.json();
             return data
-        } catch (error) {
+          } catch (error) {
             console.error('Ошибка:', error);
-        }
+          }
     }
     
     clickCard(item, e) {
@@ -62,11 +66,10 @@ export class MainPage {
         this.parent.insertAdjacentHTML('beforeend', html)
         const carouselInner = document.getElementById('carousel-inner');
         const data = await this.getData()
- 
+        console.log(data)
         for(let i = 0; i<Object.keys(data).length; i++){
     
             const item = data[i]
-           
             item.babuflex = Texts[i]
             item.copyright = item.explanation
             item.explanation = getFirstTwoSentences(item.explanation)
