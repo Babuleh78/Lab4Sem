@@ -25,3 +25,6 @@ app.listen(port, host, () => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+
+//Query selector обновление 

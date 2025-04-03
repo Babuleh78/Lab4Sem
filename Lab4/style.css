@@ -27,3 +27,16 @@ pre {
     border-radius: 5px;
     overflow-x: auto;
 }
+
+#changeSectionContent {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+}

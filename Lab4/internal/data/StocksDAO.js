@@ -27,7 +27,7 @@ class StockDAO {
             stock.title === undefined ||
             stock.url === undefined
         ) {
-            throw new Error('invalidate stock data');
+            throw new Error('invalidate stock data (Сам ты Лёва, инвалид)');
         }
 
         this._validateId(stock.id);
