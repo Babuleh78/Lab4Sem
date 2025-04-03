@@ -1,12 +1,13 @@
 const express = require('express');
-const {StocksController} = require('./StocksController');
+const {DataController} = require('./DataController');
 
 const router = express.Router();
 
 
-router.get('/get', StocksController.findStocks);
-router.get('/:id', StocksController.findStockById);
-router.post('/', StocksController.addStock);
-router.delete('/:id', StocksController.deleteStock);
+router.get('/get', DataController.findData);
+router.get('/:id', DataController.findDataById);
+router.post('/', DataController.addData);
+router.delete('/:id', DataController.deleteData);
+// router.patch('/:id', DataController.patchDataByid);
 
 module.exports = router;

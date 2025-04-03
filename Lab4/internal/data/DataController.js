@@ -1,37 +1,37 @@
-const {StocksService} = require('./StocksService');
+const {DataService} = require('./DataService');
 
-class StocksController {
-    static findStocks(req, res) {
+class DataController {
+    static findData(req, res) {
         
         try {
-            res.send(StocksService.findStocks());
+            res.send(DataService.findCards());
         } catch (err) {
             res.status(400).send({status: 'Bad Request', message: err.message})
         }
     }
 
-    static findStockById(req, res) {
+    static findDataById(req, res) {
         try {
             const id = Number.parseInt(req.params.id);
-            res.send(StocksService.findStocks(id));
+            res.send(DataService.findCards(id));
         } catch (err) {
             res.status(400).send({status: 'Bad Request', message: err.message + "SC"})
         }
     }
 
-    static addStock(req, res) {
+    static addData(req, res) {
         try {
-            res.send(StocksService.addStock(req.body));
+            res.send(DataService.addCard(req.body));
         } catch (err) {
             res.status(400).send({status: 'Bad Request', message: err.message})
         }
     }
 
-    static deleteStock(req, res) {
+    static deleteData(req, res) {
         try {
             
             const id = Number.parseInt(req.params.id);
-            res.send(StocksService.deleteStock(id));
+            res.send(DataService.deleteCard(id));
         } catch (err) {
             res.status(400).send({status: 'Bad Request', message: err.message})
         }
@@ -39,5 +39,5 @@ class StocksController {
 }
 
 module.exports = {
-    StocksController,
+    DataController,
 };

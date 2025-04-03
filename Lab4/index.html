@@ -3,45 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Я вырубился как Папа Карло</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Primitive API Interface</h1>
     
     <section>
-        <h2>1. Получить все данные</h2>
-        <button onclick="getAllData()">GET /get</button>
-        <pre id="allDataResult">Результат появится здесь...</pre>
+        <h2>1. Получить все данные <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <button onclick="getAllData()">GET /get</button>
+            <pre id="allDataResult">Результат появится здесь...</pre>
+        </div>
     </section>
     
     <section>
-        <h2>2. Получить данные по ID</h2>
-        <input type="text" id="dataId" placeholder="Введите ID карточки">
-        <button onclick="getDataById()">GET /:id</button>
-        <pre id="dataByIdResult">Результат появится здесь...</pre>
+        <h2>2. Получить данные по ID <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="dataId" placeholder="Введите ID карточки">
+            <button onclick="getDataById()">GET /:id</button>
+            <pre id="dataByIdResult">Результат появится здесь...</pre>
+
+        </div>
     </section>
     
     <section>
-        <h2>3. Добавить новую карточку</h2>
-        <input type="text" id="newId" placeholder="ID">
-        <input type="text" id="newDate" placeholder="Дата">
-        <input type="text" id="newTitle" placeholder="Название">
-        <textarea id="newExplanation" placeholder="Описание"></textarea>
-        <input type="text" id="newUrl" placeholder="URL изображения">
-        <button onclick="addData()">POST /</button>
-        <pre id="addDataResult">Результат появится здесь...</pre>
+        <h2 >3. Добавить новую карточку <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="newId" placeholder="ID">
+            <input type="text" id="newDate" placeholder="Дата">
+            <input type="text" id="newTitle" placeholder="Название">
+            <textarea id="newExplanation" placeholder="Описание"></textarea>
+            <input type="text" id="newUrl" placeholder="URL изображения">
+            <button onclick="addData()">POST /</button>
+            <pre id="addDataResult">Результат появится здесь...</pre>
+        </div>
     </section>
     
     <section>
-        <h2>4. Удалить карточку</h2>
-        <input type="text" id="deleteId" placeholder="Введите ID для удаления">
-        <button onclick="deleteData()">DELETE /:id</button>
-        <pre id="deleteDataResult">Результат появится здесь...</pre>
+        <h2>4. Удалить карточку <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="deleteId" placeholder="Введите ID для удаления">
+            <button onclick="deleteData()">DELETE /:id</button>
+            <pre id="deleteDataResult">Результат появится здесь...</pre>
+        </div>
     </section>
 
     <section>
-        <h2 onclick="toggleChangeSection(this)" style="cursor: pointer;">5. Изменить карточку по id ▼</h2>
+        <h2>5. Изменить карточку по id <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
         <div class="changeSectionContent">
             <input type="text" id="changeId" placeholder="ID">
             <input type="text" id="changeDate" placeholder="Дата">
@@ -54,7 +62,7 @@
     </section>
 
     <section>
-        <h2 onclick="toggleChangeSection(this)" style="cursor: pointer;">6. Применить фильтры ▼</h2>
+        <h2>6. Применить фильтры <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
         <div class="changeSectionContent">
             <input type="text" id="newId" placeholder="ID">
             <input type="text" id="newDate" placeholder="Дата">

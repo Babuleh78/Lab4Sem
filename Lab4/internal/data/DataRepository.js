@@ -1,6 +1,6 @@
 const {DBConnector} = require('../../modules/DBConnector');
 
-class StocksRepository {
+class DataRepository {
     static db = new DBConnector('..\\..\\Lab3\\data.json');
 
     static read() {
@@ -14,5 +14,5 @@ class StocksRepository {
 }
 
 module.exports = {
-    StocksRepository,
+    DataRepository,
 }

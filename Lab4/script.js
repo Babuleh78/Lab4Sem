@@ -91,10 +91,10 @@ async function changeData() {
         document.getElementById('changeDataResult').textContent = 'Нет данных для изменения';
         return;
     }
-
+    console.log(id);
     try {
         const response = await fetch(`${API_BASE_URL}/${id}`, {
-            method: 'PATCH', // Используем PATCH для частичного обновления
+            method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -129,31 +129,27 @@ async function changeData() {
 
 
 
-function toggleChangeSection(header) {
-    // Получаем следующий элемент после заголовка
-    const content = header.nextElementSibling;
+function toggleChangeSection(button) {
+    const section = button.parentElement;
+    const content = section.nextElementSibling;
     
-    // Переключаем класс
-    content.classList.toggle('collapsed');
-    
-    // Меняем стрелочку в заголовке
-    if (content.classList.contains('collapsed')) {
-        header.textContent = header.textContent.replace('▼', '▶');
+    if (content.style.display === "none") {
+        content.style.display = "block";
+        button.textContent = " ▼ ";
     } else {
-        header.textContent = header.textContent.replace('▶', '▼');
+        content.style.display = "none";
+        button.textContent = " ▶ ";
     }
 }
 
+// Инициализация - скрываем все блоки контента при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    // Сворачиваем все секции при загрузке
-    const contents = document.querySelectorAll('.changeSectionContent');
-    const headers = document.querySelectorAll('section h2');
-    
-    contents.forEach(content => {
-        content.classList.add('collapsed');
-    });
-    
-    headers.forEach(header => {
-        header.textContent = header.textContent.replace('▼', '▶');
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        const button = section.querySelector('button.collapseButton');
+        const content = section.querySelector('.changeSectionContent');
+        
+        content.style.display = "none";
+        button.textContent = " ▶ ";
     });
 });

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-const stocks = require('./internal/data');
+const data = require('./internal/data');
 
 
 const app = express();
@@ -13,10 +13,9 @@ const port = 8000;
 
 app.use(express.json());
 
-app.use('/data', stocks);
+app.use('/data', data);
 
 app.use(express.static(path.join(__dirname)));
-console.log(path.join(__dirname));
 
 app.listen(port, host, () => {
     console.log(`Сервер запущен по адресу http://${host}:${port}`);
