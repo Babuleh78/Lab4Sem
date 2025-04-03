@@ -15,7 +15,7 @@ class DataController {
             const id = Number.parseInt(req.params.id);
             res.send(DataService.findCards(id));
         } catch (err) {
-            res.status(400).send({status: 'Bad Request', message: err.message + "SC"})
+            res.status(400).send({status: 'Wrong id', message: err.message})
         }
     }
 
@@ -36,6 +36,17 @@ class DataController {
             res.status(400).send({status: 'Bad Request', message: err.message})
         }
     }
+
+    static patchDataByid(req, res) {
+        try {
+            const id = req.params.id; 
+            const changes = req.body; 
+            res.send( DataService.patchCard(id, changes));
+        } catch(err) {
+            res.status(400).send({status: 'Patch Error', message: err.message});
+        }
+    }
+
 }
 
 module.exports = {

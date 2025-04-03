@@ -91,7 +91,6 @@ async function changeData() {
         document.getElementById('changeDataResult').textContent = 'Нет данных для изменения';
         return;
     }
-    console.log(id);
     try {
         const response = await fetch(`${API_BASE_URL}/${id}`, {
             method: 'PATCH', 
@@ -106,10 +105,13 @@ async function changeData() {
         }
         
         
+        const data = await response.json();
+        
         let result = "Измененные поля:\n";
         for (const [key, value] of Object.entries(updateData)) {
             result += `${key}: ${value}\n`;
         }
+        result += "\nОтвет сервера:\n" + JSON.stringify(data, null, 2);
         
         document.getElementById('changeDataResult').textContent = result;
     } catch (error) {

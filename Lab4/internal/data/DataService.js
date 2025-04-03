@@ -17,6 +17,10 @@ class DataService {
     static deleteCard(id) {
         return DataDAO.delete(id).map((card) => card.toJSON());
     }
+
+    static patchCard(id, changes){
+        return DataDAO.patch(id, changes).toJSON();
+    }
 }
 
 module.exports = {

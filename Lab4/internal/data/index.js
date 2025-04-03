@@ -8,6 +8,6 @@ router.get('/get', DataController.findData);
 router.get('/:id', DataController.findDataById);
 router.post('/', DataController.addData);
 router.delete('/:id', DataController.deleteData);
-// router.patch('/:id', DataController.patchDataByid);
+router.patch('/:id', DataController.patchDataByid);
 
 module.exports = router;

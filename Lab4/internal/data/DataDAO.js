@@ -69,6 +69,30 @@ class DataDAO {
         });
     }
 
+    static patch(id, changes) {
+        const cards = DataRepository.read();
+        
+        // Находим нужную карточку
+        const cardIndex = cards.findIndex(c => c.id == id);
+        if (cardIndex === -1) {
+            throw new Error('Card not found');
+        }
+        
+        // Обновляем только переданные поля
+        const updatedCard = {
+            ...cards[cardIndex],
+            ...changes,
+            id: cards[cardIndex].id // Сохраняем оригинальный ID
+        };
+        
+        // Заменяем карточку в массиве
+        cards[cardIndex] = updatedCard;
+        // Сохраняем изменения
+        DataRepository.write(cards);
+        
+        return new this(updatedCard.id, updatedCard.date, updatedCard.explanation, updatedCard.title, updatedCard.url);
+    }
+    
     toJSON() {
         return {
             id: this.id,
