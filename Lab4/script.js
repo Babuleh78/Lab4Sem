@@ -119,7 +119,48 @@ async function changeData() {
     }
 }
 
+async function filterData() {
+    console.log("filterData");
+    const id_cond = document.getElementById('filterId').value;
+    const date_cond = document.getElementById('filterDate').value;
+    const title_cond = document.getElementById('filterTitle').value;
+    const explanation_cond = document.getElementById('filterExplanation').value;
+    const url_cond = document.getElementById('filterUrl').value;
 
+    const queryParams = new URLSearchParams();
+
+    if (id_cond) queryParams.append('id', id_cond);
+    if (date_cond) queryParams.append('date_after', date_cond);
+    if (title_cond) queryParams.append('title_like', title_cond);
+    if (explanation_cond) queryParams.append('explanation_length', explanation_cond);
+    if (url_cond) queryParams.append('url_length', url_cond);
+
+    console.log(queryParams);
+
+    try {
+        console.log(`${API_BASE_URL}/filter?${queryParams.toString()}`);
+        const response = await fetch(`${API_BASE_URL}/filter?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Форматируем результат для вывода
+        let result = `Найдено записей: ${data.length}\n\n`;
+        result += JSON.stringify(data, null, 2);
+        
+        document.getElementById('filterDataResult').textContent = result;
+    } catch (error) {
+        document.getElementById('filterDataResult').textContent = 'Ошибка: ' + error.message;
+    }
+}
 
 
 

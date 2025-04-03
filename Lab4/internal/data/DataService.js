@@ -21,6 +21,11 @@ class DataService {
     static patchCard(id, changes){
         return DataDAO.patch(id, changes).toJSON();
     }
+
+    static findDataByFilter(conditions) {
+        const filteredData = DataDAO.filter(conditions);
+        return filteredData;
+    }
 }
 
 module.exports = {

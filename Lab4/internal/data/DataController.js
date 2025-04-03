@@ -47,6 +47,15 @@ class DataController {
         }
     }
 
+    static findDataByFilter(req, res) {
+        try {
+            const conditions = req.query;
+            res.send(DataService.findDataByFilter(conditions));
+        } catch(err) {
+            res.status(400).send({status: 'Bad Request', message: err.message})
+        }
+    }
+
 }
 
 module.exports = {

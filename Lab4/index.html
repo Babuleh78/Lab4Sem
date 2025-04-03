@@ -65,13 +65,13 @@
     <section>
         <h2>6. Применить фильтры <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
         <div class="changeSectionContent">
-            <input type="text" id="newId" placeholder="ID">
-            <input type="text" id="newDate" placeholder="Дата">
-            <input type="text" id="newTitle" placeholder="Название">
-            <textarea id="newExplanation" placeholder="Описание"></textarea>
-            <input type="text" id="newUrl" placeholder="URL изображения">
-            <button onclick="changeData()">POST /</button>
-            <pre id="addDataResult">Результат появится здесь...</pre>
+            <input type="text" id="filterId" placeholder="ID (Сортировка невозможна)">
+            <input type="text" id="filterDate" placeholder="Дата">
+            <input type="text" id="filterTitle" placeholder="Название">
+            <textarea id="filterExplanation" placeholder="Описание"></textarea>
+            <input type="text" id="filterUrl" placeholder="URL изображения">
+            <button onclick="filterData()">Filter</button>
+            <pre id="filterDataResult">Результат появится здесь...</pre>
         </div>
     </section>
 

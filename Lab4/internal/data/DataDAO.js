@@ -1,3 +1,4 @@
+const { title } = require('process');
 const {DataRepository} = require('./DataRepository');
 
 class DataDAO {
@@ -15,7 +16,7 @@ class DataDAO {
 
         if (Number.isNaN(numberId)) {
             
-            throw new Error('invalidate id (Сам ты Лёва, инвалид)');
+            throw new Error('invalidate id (Сам ты Лёва, инвалид!)');
         }
     }
 
@@ -72,25 +73,43 @@ class DataDAO {
     static patch(id, changes) {
         const cards = DataRepository.read();
         
-        // Находим нужную карточку
         const cardIndex = cards.findIndex(c => c.id == id);
         if (cardIndex === -1) {
             throw new Error('Card not found');
         }
         
-        // Обновляем только переданные поля
         const updatedCard = {
             ...cards[cardIndex],
             ...changes,
-            id: cards[cardIndex].id // Сохраняем оригинальный ID
+            id: cards[cardIndex].id 
         };
         
-        // Заменяем карточку в массиве
         cards[cardIndex] = updatedCard;
-        // Сохраняем изменения
         DataRepository.write(cards);
         
         return new this(updatedCard.id, updatedCard.date, updatedCard.explanation, updatedCard.title, updatedCard.url);
+    }
+    
+    static filter(conditions) {
+        const cards = DataRepository.read();
+        return cards.filter(card => {
+            // Фильтрация по ID
+            if (conditions.id && card.id !== conditions.id) return false;
+            
+            // Фильтрация по дате (после указанной даты)
+            if (conditions.date_after && new Date(card.date) < new Date(conditions.date_after)) return false;
+            
+            // Фильтрация по заголовку (содержит подстроку)
+            if (conditions.title_like && !card.title.includes(conditions.title_like)) return false;
+            
+            // Фильтрация по длине объяснения
+            if (conditions.explanation_length && card.explanation.length < parseInt(conditions.explanation_length)) return false;
+            
+            // Фильтрация по длине URL
+            if (conditions.url_length && card.url.length < parseInt(conditions.url_length)) return false;
+            
+            return true;
+        });
     }
     
     toJSON() {
