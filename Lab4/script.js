@@ -135,7 +135,7 @@ async function filterData() {
     if (explanation_cond) queryParams.append('explanation_length', explanation_cond);
     if (url_cond) queryParams.append('url_length', url_cond);
 
-    console.log(queryParams);
+    
 
     try {
         console.log(`${API_BASE_URL}/filter?${queryParams.toString()}`);
@@ -185,7 +185,6 @@ function toggleChangeSection(button) {
     }
 }
 
-// Инициализация - скрываем все блоки контента при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
