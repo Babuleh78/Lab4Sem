@@ -178,7 +178,7 @@ function toggleChangeSection(button) {
     
     if (content.style.display === "none") {
         content.style.display = "block";
-        button.textContent = " ▼ ";
+        button.textContent = " 🔽 ";
     } else {
         content.style.display = "none";
         button.textContent = " ▶ ";

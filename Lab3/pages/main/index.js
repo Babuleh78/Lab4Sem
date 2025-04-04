@@ -2,6 +2,8 @@ import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
 
 export class MainPage {
+
+    response = 'http://localhost:8000/data/get'
     constructor(parent) {
         this.parent = parent;
     }
@@ -36,6 +38,7 @@ export class MainPage {
                         <textarea id="filter-explanation" placeholder="Описание(по длине)"></textarea>
                         <input type="text" id="filter-url" placeholder="URL (по длине)">
                         <button id="filter-button">Filter</button>
+                        <button id ="sbros-button">Сброс</button>
                     </div>
                 </section>
             </div>
@@ -44,7 +47,7 @@ export class MainPage {
     
     async getData() {
         try {
-            const response = await fetch('http://localhost:8000/data/get'); 
+            const response = await fetch(this.response); 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -72,22 +75,40 @@ export class MainPage {
         collapseButton.addEventListener('click', () => {
             if (content.style.display === "none") {
                 content.style.display = "block";
-                collapseButton.textContent = "▼";
+                collapseButton.textContent = "🔽";
             } else {
                 content.style.display = "none";
                 collapseButton.textContent = "▶";
             }
         });
         
-        // Обработчик для кнопки фильтрации
+        
         const filterButton = this.pageRoot.querySelector('#filter-button');
         filterButton.addEventListener('click', this.filterData.bind(this));
+
+        const sbrosButton = this.pageRoot.querySelector('#sbros-button');
+        sbrosButton.addEventListener('click', ()=>{this.response ='http://localhost:8000/data/get'; this.render(); });
     }
     
     filterData() {
-        // Реализация фильтрации данных
-        const resultElement = this.pageRoot.querySelector('#filter-data-result');
-        resultElement.textContent = "Фильтрация пока не реализована";
+        const id_cond = document.getElementById('filter-id').value;
+        const date_cond = document.getElementById('filter-date').value;
+        const title_cond = document.getElementById('filter-title').value;
+        const explanation_cond = document.getElementById('filter-explanation').value;
+        const url_cond = document.getElementById('filter-url').value;
+
+        const queryParams = new URLSearchParams();
+
+        if (id_cond) queryParams.append('id', id_cond);
+        if (date_cond) queryParams.append('date_after', date_cond);
+        if (title_cond) queryParams.append('title_like', title_cond);
+        if (explanation_cond) queryParams.append('explanation_length', explanation_cond);
+        if (url_cond) queryParams.append('url_length', url_cond);
+   
+        this.response = 'http://localhost:8000/data/filter?';
+        this.response+=queryParams.toString();
+       
+        this.render();
     }
     
     async render() {
