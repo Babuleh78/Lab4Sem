@@ -168,10 +168,6 @@ async function filterData() {
 
 
 
-
-
-
-
 function toggleChangeSection(button) {
     const section = button.parentElement;
     const content = section.nextElementSibling;
