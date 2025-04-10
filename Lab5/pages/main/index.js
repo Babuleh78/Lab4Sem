@@ -1,4 +1,4 @@
-import { ProductCardComponent } from "../../../components/product-card/index.js";
+import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
 
 export class MainPage {
