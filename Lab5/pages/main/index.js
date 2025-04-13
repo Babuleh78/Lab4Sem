@@ -1,5 +1,8 @@
 import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
+import {ajax} from "../../modules/ajax.js";
+import {urls} from "../../modules/urls.js";
+import {GROUP_ID} from "../../modules/consts.js";
 
 export class MainPage {
 
@@ -45,16 +48,32 @@ export class MainPage {
         `;
     }
     
+    // async getData() {
+    //     try {
+    //         const response = await fetch(this.response); 
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    //         return await response.json();
+    //     } catch (error) {
+    //         console.error('Ошибка при получении данных:', error);
+    //         throw error;
+    //     }
+    // }
     async getData() {
         try {
-            const response = await fetch(this.response); 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return await response.json();
+            
+            const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            
+            const memberIds = apiResponse.response.items.slice(0, 20);
+            const usersInfo = await ajax.post(urls.getUsersInfo(memberIds));
+           
+            console.log(usersInfo);
+            return usersInfo;
+            
         } catch (error) {
-            console.error('Ошибка при получении данных:', error);
-            throw error;
+            console.error('Лошара:', error);
+            return [];
         }
     }
     
@@ -91,6 +110,8 @@ export class MainPage {
     }
     
     filterData() {
+
+        
         const id_cond = document.getElementById('filter-id').value;
         const date_cond = document.getElementById('filter-date').value;
         const title_cond = document.getElementById('filter-title').value;
@@ -112,31 +133,26 @@ export class MainPage {
     }
     
     async render() {
-        const texts = [
-            "Мне показалось, что 3 поля мало", 
-            "Этот текст уникальный для каждой фотки", 
-            "Честно", 
-            "Пречестно"
-        ]; 
-
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
         const carouselInner = document.getElementById('carousel-inner');
         const data = await this.getData();
         
-        data.forEach((item, index) => {
-            const text = texts[index % texts.length];
-            const modifiedItem = {
-                ...item,
-                babuflex: text,
-                copyright: item.explanation,
-                explanation: this.getFirstTwoSentences(item.explanation)
-            };
-            
-            const productCard = new ProductCardComponent(carouselInner);
-            productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
-        });
+        if (data) {
+            data.forEach((item, index) => {
+                const modifiedItem = {
+                    ...item,
+                    copyright: item.explanation,
+                    explanation: this.getFirstTwoSentences(item.explanation)
+                };
+                
+                const productCard = new ProductCardComponent(carouselInner);
+                productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
+            });
+        } else{
+            console.log("NO DATA");
+        }
         
         this.setupEventListeners();
     }
