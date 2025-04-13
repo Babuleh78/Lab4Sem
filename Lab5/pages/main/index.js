@@ -17,49 +17,14 @@ export class MainPage {
     
     getHTML() {
         return `
-            <div id="main-page">
-                <!-- Основная карусель -->
-                <div class="carousel slide" data-bs-ride="carousel" id="main-carousel">
-                    <div class="carousel-inner" id="carousel-inner"></div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#main-carousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Предыдущий</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#main-carousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Следующий</span>
-                    </button>
-                </div>
-                
-                <!-- Фильтры поверх карусели -->
-                <section class="filters-overlay">
-                    <h2>Применить фильтры <button class="collapse-button">▼</button></h2>
-                    <div class="change-section-content">
-                        <input type="text" id="filter-id" placeholder="ID (Сортировка невозможна)">
-                        <input type="text" id="filter-date" placeholder="Дата(все карточки позже)">
-                        <input type="text" id="filter-title" placeholder="Название(LIKE)">
-                        <textarea id="filter-explanation" placeholder="Описание(по длине)"></textarea>
-                        <input type="text" id="filter-url" placeholder="URL (по длине)">
-                        <button id="filter-button">Filter</button>
-                        <button id ="sbros-button">Сброс</button>
-                    </div>
-                </section>
+        <div id="main-page" class="container-fluid p-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4" id="cards-container">
+                <!-- Карточки будут вставляться сюда -->
             </div>
+        </div>
         `;
     }
     
-    // async getData() {
-    //     try {
-    //         const response = await fetch(this.response); 
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status: ${response.status}`);
-    //         }
-    //         return await response.json();
-    //     } catch (error) {
-    //         console.error('Ошибка при получении данных:', error);
-    //         throw error;
-    //     }
-    // }
     async getData() {
         try {
             
@@ -67,9 +32,8 @@ export class MainPage {
             
             const memberIds = apiResponse.response.items.slice(0, 20);
             const usersInfo = await ajax.post(urls.getUsersInfo(memberIds));
-           
-            console.log(usersInfo);
-            return usersInfo;
+        
+            return usersInfo.response;
             
         } catch (error) {
             console.error('Лошара:', error);
@@ -85,28 +49,28 @@ export class MainPage {
     
     setupEventListeners() {
         // Обработчик для кнопки сворачивания/разворачивания
-        const collapseButton = this.pageRoot.querySelector('.collapse-button');
-        const content = this.pageRoot.querySelector('.change-section-content');
+        // const collapseButton = this.pageRoot.querySelector('.collapse-button');
+        // const content = this.pageRoot.querySelector('.change-section-content');
         
-        content.style.display = "none";
-        collapseButton.textContent = "▶";
+        // content.style.display = "none";
+        // collapseButton.textContent = "▶";
         
-        collapseButton.addEventListener('click', () => {
-            if (content.style.display === "none") {
-                content.style.display = "block";
-                collapseButton.textContent = "🔽";
-            } else {
-                content.style.display = "none";
-                collapseButton.textContent = "▶";
-            }
-        });
+        // collapseButton.addEventListener('click', () => {
+        //     if (content.style.display === "none") {
+        //         content.style.display = "block";
+        //         collapseButton.textContent = "🔽";
+        //     } else {
+        //         content.style.display = "none";
+        //         collapseButton.textContent = "▶";
+        //     }
+        // });
         
         
-        const filterButton = this.pageRoot.querySelector('#filter-button');
-        filterButton.addEventListener('click', this.filterData.bind(this));
+        // const filterButton = this.pageRoot.querySelector('#filter-button');
+        // filterButton.addEventListener('click', this.filterData.bind(this));
 
-        const sbrosButton = this.pageRoot.querySelector('#sbros-button');
-        sbrosButton.addEventListener('click', ()=>{this.response ='http://localhost:8000/data/get'; this.render(); });
+        // const sbrosButton = this.pageRoot.querySelector('#sbros-button');
+        // sbrosButton.addEventListener('click', ()=>{this.response ='http://localhost:8000/data/get'; this.render(); });
     }
     
     filterData() {
@@ -132,23 +96,47 @@ export class MainPage {
         this.render();
     }
     
+    
     async render() {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
-        
-        const carouselInner = document.getElementById('carousel-inner');
+
+        const cardsContainer = document.getElementById('cards-container');
         const data = await this.getData();
-        
+       
         if (data) {
+
+            function formatLastSeen(timestamp) {
+                if (!timestamp || !timestamp.time) return "Недавно";
+                
+                const lastSeenDate = new Date(timestamp.time * 1000);
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - lastSeenDate) / 1000);
+                
+                if (diffInSeconds < 60) return "Только что";
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} мин. назад`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} ч. назад`;
+                
+                return lastSeenDate.toLocaleDateString();
+            }
+
             data.forEach((item, index) => {
+              
                 const modifiedItem = {
-                    ...item,
-                    copyright: item.explanation,
-                    explanation: this.getFirstTwoSentences(item.explanation)
+                    first_name: item.first_name ?? "Имя не указано",
+                    last_name: item.last_name ?? "Фамилия не указана",
+                    url: item.photo_400 ?? item.photo_100 ?? "default_avatar.jpg",
+                    city: item.city?.title ?? "Город не указан",
+                    sex: typeof item.sex === 'number' 
+                        ? (item.sex === 2 ? "Мужской" : "Женский") 
+                        : "Не указан",
+                    last_seen: item.last_seen ? formatLastSeen(item.last_seen) : "Недавно",
+                    status: item.status
                 };
                 
-                const productCard = new ProductCardComponent(carouselInner);
+                const productCard = new ProductCardComponent(cardsContainer);
                 productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
+              
             });
         } else{
             console.log("NO DATA");

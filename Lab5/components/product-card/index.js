@@ -3,16 +3,46 @@ export class ProductCardComponent {
         this.parent = parent;
     }
 
+
     getHTML(data, index) {
         return `
-            <div class="carousel-item ${index === 0 ? 'active' : ''}"    ">
-                <img class="card-img-top carousel-image" src="${data.url}" alt="картинка" style="width: 100%; height: 80vh;">
-                <div>
-                        <h5 class="card-title">${data.title}</h5>
-                        <p class="card-text">${data.explanation}</p>
-                       <button class="btn btn-primary" id="click-card-${index}" data-id="${index}" style="display: block; margin: auto;">Читать далее</button>
+        <div class="card shadow-sm" style="width: 18rem; margin: 15px;">
+            <img src="${data.url || 'https://via.placeholder.com/300'}" 
+                 class="card-img-top" 
+                 alt="${data.first_name} ${data.last_name}"
+                 style="height: 250px; object-fit: cover;">
+            
+            <div class="card-body">
+                <h5 class="card-title">
+                    ${data.first_name || 'Имя не указано'} 
+                    ${data.last_name || 'Фамилия не указана'}
+                </h5>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="badge bg-${data.sex === 'Мужской' ? 'primary' : 'danger'}">
+                        ${data.sex}
+                    </span>
+                    <span class="text-muted">
+                        <i class="bi bi-geo-alt"></i> 
+                        ${data.city}
+                    </span>
                 </div>
+                
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="bi bi-clock"></i> 
+                        Был(а) в сети: ${data.last_seen}
+                    </small>
+                </p>
+                
+                ${data.status ? `<p class="card-text mt-2">${data.status}</p>` : ''}
+                
+                <button class="btn btn-outline-primary w-100 mt-2" 
+                        data-index="${index}">
+                    Подробнее
+                </button>
             </div>
+        </div>
         `;
     }
 
