@@ -120,7 +120,6 @@ async function changeData() {
 }
 
 async function filterData() {
-    console.log("filterData");
     const id_cond = document.getElementById('filterId').value;
     const date_cond = document.getElementById('filterDate').value;
     const title_cond = document.getElementById('filterTitle').value;
@@ -152,7 +151,6 @@ async function filterData() {
         
         const data = await response.json();
         
-        // Форматируем результат для вывода
         let result = `Найдено записей: ${data.length}\n\n`;
         result += JSON.stringify(data, null, 2);
         
@@ -177,7 +175,7 @@ function toggleChangeSection(button) {
         button.textContent = " 🔽 ";
     } else {
         content.style.display = "none";
-        button.textContent = " ▶ ";
+        button.textContent = "▶️ ";
     }
 }
 
@@ -188,6 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const content = section.querySelector('.changeSectionContent');
         
         content.style.display = "none";
-        button.textContent = " ▶ ";
+        button.textContent = " ▶️ ";
     });
 });

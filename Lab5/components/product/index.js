@@ -19,9 +19,9 @@ export class ProductComponent {
                 border-radius: 10px;
                 background: white;
                 padding: 20px;
-                max-height: 300px;
+                max-height: 500px;
             ">
-                <img src="${data.photo_400}" class="img-fluid" style="
+                <img src="${data.photo}" class="img-fluid" style="
                     border-radius: 10px;
                     width: 100%;
                     height: 100%;
@@ -54,10 +54,10 @@ export class ProductComponent {
                         </h2>
                         <div id="basicInfoSection" class="accordion-collapse collapse" data-bs-parent="#userAccordion">
                             <div class="accordion-body">
-                                <p><strong>Пол:</strong> ${data.sex === 1 ? 'Женский' : data.sex === 2 ? 'Мужской' : 'Не указан'}</p>
+                                <p><strong>Пол:</strong> ${data.sex}</p>
                                 ${data.bdate ? `<p><strong>Дата рождения:</strong> ${data.bdate}</p>` : ''}
-                                ${data.city ? `<p><strong>Город:</strong> ${data.city.title}</p>` : ''}
-                                ${data.country ? `<p><strong>Страна:</strong> ${data.country.title}</p>` : ''}
+                                ${data.city ? `<p><strong>Город:</strong> ${data.city}</p>` : ''}
+                                ${data.country ? `<p><strong>Страна:</strong> ${data.country}</p>` : ''}
                                 <p><strong>Ссылка:</strong> vk.com/${data.domain}</p>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ export class ProductComponent {
                         <div id="activitySection" class="accordion-collapse collapse" data-bs-parent="#userAccordion">
                             <div class="accordion-body">
                                 <p><strong>Статус:</strong> ${data.online ? 'Онлайн' : 'Оффлайн'}</p>
-                                ${data.last_seen ? `<p><strong>Последний визит:</strong> ${new Date(data.last_seen.time * 1000).toLocaleString()}</p>` : ''}
+                                ${data.last_seen ? `<p><strong>Последний визит:</strong> ${data.last_seen}</p>` : ''}
                                 ${data.status ? `<p><strong>Статус:</strong> ${data.status}</p>` : ''}
                             </div>
                         </div>
@@ -88,8 +88,8 @@ export class ProductComponent {
                         </h2>
                         <div id="socialSection" class="accordion-collapse collapse" data-bs-parent="#userAccordion">
                             <div class="accordion-body">
-                                ${data.relation ? `<p><strong>Семейное положение:</strong> ${this.getRelationText(data.relation)}</p>` : ''}
-                                ${data.relatives ? this.formatRelatives(data.relatives) : ''}
+                                ${data.relation ? `<p><strong>Семейное положение:</strong> ${data.relation}</p>` : ''}
+                                ${data.relatives ? `<p><strong>Отношения:</strong> ${data.relatives}</p>` : ''}
                                 <p><strong>Можно писать в ЛС:</strong> ${data.can_write_private_message ? 'Да' : 'Нет'}</p>
                             </div>
                         </div>
@@ -104,11 +104,11 @@ export class ProductComponent {
                         </h2>
                         <div id="educationSection" class="accordion-collapse collapse" data-bs-parent="#userAccordion">
                             <div class="accordion-body">
-                                ${data.education ? this.formatEducation(data.education) : ''}
-                                ${data.universities ? this.formatUniversities(data.universities) : ''}
-                                ${data.schools ? this.formatSchools(data.schools) : ''}
+                                ${data.education ? data.education : ''}
+                                ${data.universities ? data.universities : ''}
+                                ${data.schools ? data.schools : ''}
                                 ${data.occupation ? `<p><strong>Род деятельности:</strong> ${data.occupation}</p>` : ''}
-                                ${data.career ? this.formatCareer(data.career) : ''}
+                                ${data.career ? `<p><strong>Карьера:</strong> ${data.career} </p>` : ''}
                             </div>
                         </div>
                     </div>
@@ -134,39 +134,13 @@ export class ProductComponent {
                         </div>
                     </div>
     
-                    <!-- Контакты и соцсети -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactsSection">
-                                Контакты и соцсети
-                            </button>
-                        </h2>
-                        <div id="contactsSection" class="accordion-collapse collapse" data-bs-parent="#userAccordion">
-                            <div class="accordion-body">
-                                ${data.mobile_phone ? `<p><strong>Телефон:</strong> ${data.mobile_phone}</p>` : ''}
-                                ${data.home_phone ? `<p><strong>Домашний телефон:</strong> ${data.home_phone}</p>` : ''}
-                                ${data.site ? `<p><strong>Сайт:</strong> <a href="${data.site}" target="_blank">${data.site}</a></p>` : ''}
-                                ${data.skype ? `<p><strong>Skype:</strong> ${data.skype}</p>` : ''}
-                                ${data.facebook ? `<p><strong>Facebook:</strong> <a href="${data.facebook}" target="_blank">${data.facebook}</a></p>` : ''}
-                                ${data.twitter ? `<p><strong>Twitter:</strong> <a href="${data.twitter}" target="_blank">${data.twitter}</a></p>` : ''}
-                                ${data.instagram ? `<p><strong>Instagram:</strong> <a href="https://instagram.com/${data.instagram}" target="_blank">@${data.instagram}</a></p>` : ''}
-                            </div>
-                        </div>
-                    </div>
+                   
+                   
                 </div>
             </div>
         </div>
     
-        <footer style="
-            width: 100%;
-            height: 420px;
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            background: 
-                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('https://i.ytimg.com/vi/DTCYa53oWK0/maxresdefault.jpg') center/cover;
-            color: white;
-        "></footer>
+       
         `;
     }
     render(data) {

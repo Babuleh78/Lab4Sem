@@ -7,7 +7,7 @@ export class ProductCardComponent {
     getHTML(data, index) {
         return `
         <div class="card shadow-sm" style="width: 18rem; margin: 15px;">
-            <img src="${data.url || 'https://via.placeholder.com/300'}" 
+            <img src="${data.photo || 'https://via.placeholder.com/300'}" 
                  class="card-img-top" 
                  alt="${data.first_name} ${data.last_name}"
                  style="height: 250px; object-fit: cover;">
