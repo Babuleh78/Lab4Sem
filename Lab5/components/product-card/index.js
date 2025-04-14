@@ -37,7 +37,7 @@ export class ProductCardComponent {
                 
                 ${data.status ? `<p class="card-text mt-2">${data.status}</p>` : ''}
                 
-                <button class="btn btn-outline-primary w-100 mt-2" 
+                <button id="click-card-${index}" class="btn btn-outline-primary w-100 mt-2 >
                         data-index="${index}">
                     Подробнее
                 </button>
@@ -50,7 +50,6 @@ export class ProductCardComponent {
         const button = document.getElementById(`click-card-${index}`);
         if (button) {
             button.addEventListener("click", listener);
-            
         }
     }
 
