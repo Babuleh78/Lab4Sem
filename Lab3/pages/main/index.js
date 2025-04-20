@@ -40,6 +40,7 @@ export class MainPage {
                         <button id="filter-button">Filter</button>
                         <button id ="sbros-button">Сброс</button>
                     </div>
+                    
                 </section>
             </div>
         `;

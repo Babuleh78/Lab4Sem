@@ -18,9 +18,41 @@ export class MainPage {
     getHTML() {
         return `
         <div id="main-page" class="container-fluid p-4">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4" id="cards-container">
+         <section class="filters-overlay">
+            <h2> Фильтры <button class="collapse-button">▼</button></h2>
+            <div class="change-section-content">
+                <input type="text" id="filter-city" placeholder="Город">
+                <input type="text" id="filter-date" placeholder="Дата рождения">
                 
+                <div class="filter-group">
+                    <label>Пол:</label>
+                    <div class="button-group">
+                        <button class="sex-button active" data-value="м">М</button>
+                        <button class="sex-button" data-value="ж">Ж</button>
+                        <button class="sex-button" data-value="не указан">Не указан</button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Последняя активность:</label>
+                    <div class="button-group">
+                        <button class="activity-button active" data-value="1h">Менее часа назад</button>
+                        <button class="activity-button" data-value="24h">Менее суток назад</button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="filter-button">Применить</button>
+                    <button id="sbros-button">Сброс</button>
+                </div>
             </div>
+        </section>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4" id="cards-container">
+                    
+                </div>
+
+            
         </div>
         `;
     }
