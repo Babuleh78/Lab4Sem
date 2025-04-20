@@ -27,6 +27,9 @@ class Urls {
             + `&${this.commonInfo}`;
     }
     
+    getLocalHostData(){
+        return `http://localhost:8000/data/get`;
+    }
 }
 
 export const urls = new Urls()

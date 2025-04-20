@@ -2,7 +2,7 @@ import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
 import {ajax} from "../../modules/ajax.js";
 import {urls} from "../../modules/urls.js";
-import {GROUP_ID} from "../../modules/consts.js";
+import {ACCESS_TOKEN, GROUP_ID} from "../../modules/consts.js";
 
 export class MainPage {
 
@@ -62,21 +62,86 @@ export class MainPage {
         `;
     }
     
+    // async getData() {
+    //     try {
+            
+    //         const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            
+    //         const memberIds = apiResponse.response.items.slice(0, 20);
+    //         const usersInfo = await ajax.post(urls.getUltimate(memberIds));
+            
+    //         return usersInfo.response;
+            
+    //     } catch (error) {
+    //         console.error('Лошара:', error);
+    //         return [];
+    //     }
+    // }
+
     async getData() {
         try {
+            // 1. Запрос участников группы
+            const membersUrl = new URL('https://api.vk.com/method/groups.getMembers');
+            membersUrl.searchParams.append('group_id', GROUP_ID);
+            membersUrl.searchParams.append('access_token', ACCESS_TOKEN);
+            membersUrl.searchParams.append('v', '5.131');
             
-            const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            const membersResponse = await fetch(membersUrl.toString(), {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                }
+            });
+    
+            if (!membersResponse.ok) throw new Error('Ошибка сети');
+            const membersData = await membersResponse.json();
             
-            const memberIds = apiResponse.response.items.slice(0, 20);
-            const usersInfo = await ajax.post(urls.getUltimate(memberIds));
+            if (membersData.error) throw new Error(membersData.error.error_msg);
             
-            return usersInfo.response;
+            const memberIds = membersData.response.items.slice(0, 20);
+    
+            const usersUrl = new URL('https://api.vk.com/method/users.get');
+
+           
+            usersUrl.searchParams.append('user_ids', memberIds.join(','));
+            const USER_FIELDS = [
+                'photo_200', 'photo_400', 'photo_max_orig',
+                'first_name', 'last_name', 'nickname', 'maiden_name',
+                'sex', 'bdate', 'city', 'country', 'domain',
+                'online', 'last_seen', 'status',
+                'relation', 'relatives', 'can_write_private_message',
+                'education', 'universities', 'schools', 'occupation', 'career',
+                'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about',
+                'counters', 'contacts', 'site', 'skype', 'facebook', 'twitter', 'instagram'
+            ].join(',');
+            
+            // Использование:
+            usersUrl.searchParams.append('fields', USER_FIELDS);
+            usersUrl.searchParams.append('access_token', ACCESS_TOKEN);
+            usersUrl.searchParams.append('v', '5.131');
+            
+            const usersResponse = await fetch(usersUrl.toString(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                }
+            });
+    
+            if (!usersResponse.ok) throw new Error('Ошибка сети');
+            const usersData = await usersResponse.json();
+            
+            if (usersData.error) throw new Error(usersData.error.error_msg);
+    
+            return usersData.response;
             
         } catch (error) {
-            console.error('Лошара:', error);
+            console.error('Ошибка при получении данных:', error);
             return [];
         }
-    }
+    }   
+
     
     clickCard(item, e) {
         const cardId = e.target.dataset.id;
@@ -330,7 +395,7 @@ export class MainPage {
                     maiden_name: item.maiden_name ?? null,
                     
                     // Фотографии (выбираем наилучшее доступное качество)
-                    photo: item.photo_max_orig ?? item.photo_400 ?? item.photo_200 ?? "default_avatar.jpg",
+                    photo: item.photo_max_orig ?? item.photo_400 ?? item.photo_200,
                     
                     // Демографическая информация
                     sex: typeof item.sex === 'number' 
