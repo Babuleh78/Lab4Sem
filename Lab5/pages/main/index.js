@@ -9,7 +9,12 @@ export class MainPage {
     constructor(parent) {
         this.parent = parent;
         this.maindata = [];
-        this.philterdata = [];
+        this.currentFilters = {
+            city: '',
+            sex: null,
+            bdate: '',
+            lastSeen: null
+        };
     }
     
     get pageRoot() {
@@ -28,16 +33,15 @@ export class MainPage {
                 <div class="filter-group">
                     <label>Пол:</label>
                     <div class="button-group">
-                        <button class="sex-button active" data-value="м">М</button>
+                        <button class="sex-button" data-value="м">М</button>
                         <button class="sex-button" data-value="ж">Ж</button>
-                        <button class="sex-button" data-value="не указан">Не указан</button>
                     </div>
                 </div>
                 
                 <div class="filter-group">
                     <label>Последняя активность:</label>
                     <div class="button-group">
-                        <button class="activity-button active" data-value="1h">Менее часа назад</button>
+                        <button class="activity-button" data-value="1h">Менее часа назад</button>
                         <button class="activity-button" data-value="24h">Менее суток назад</button>
                     </div>
                 </div>
@@ -83,56 +87,76 @@ export class MainPage {
    
     
     filterData(data, filters) {
-        return data.filter(member => {
-            // Фильтр по городу
-            if (filters.city && member.city?.id !== filters.city) {
+
+        console.log(filters);
+        
+        const result = data.filter(member => {
+            // Фильтр по городу (текстовый ввод)
+            
+            if (filters.city && member.city?.title?.toLowerCase() !== filters.city.toLowerCase()) {
+               
+               
                 return false;
             }
             
             // Фильтр по полу
-            if (filters.sex && member.sex !== filters.sex) {
-                return false;
+            if (filters.sex) {
+                let sexValue;
+                if (filters.sex === 'м') sexValue = 2;
+                else if (filters.sex === 'ж') sexValue = 1;
+                else if (filters.sex === 'не указан') sexValue = 0;
+                
+                if (member.sex !== sexValue) return false;
             }
             
             // Фильтр по дате рождения
             if (filters.bdate) {
                 if (!member.bdate) return false;
+                    const [day, month, year] = member.bdate.split('.');
+                    const birthDate = new Date(year || 2000, month - 1, day);
+                    const filterDate = new Date(filters.bdate);
+                    
+                    // Сравниваем только год, если введен только год
+                    if (filters.bdate.length === 4) {
+                        if (year !== filters.bdate) return false;
+                    } else {
+                        if (birthDate > filterDate) return false;
+                    }
                 
-                const [day, month, year] = member.bdate.split('.');
-                const birthDate = new Date(year || 2000, month - 1, day); // Если год не указан, считаем 2000
-                
-                if (filters.bdate.min && birthDate < new Date(filters.bdate.min)) {
-                    return false;
-                }
-                
-                if (filters.bdate.max && birthDate > new Date(filters.bdate.max)) {
-                    return false;
-                }
             }
             
+            
+
             // Фильтр по последней активности
             if (filters.lastSeen) {
                 if (!member.last_seen?.time) return false;
                 
-                const lastSeenTime = member.last_seen.time * 1000; // Переводим в мс
+                const lastSeenTime = member.last_seen.time * 1000;
                 const now = Date.now();
                 const diffHours = (now - lastSeenTime) / (1000 * 60 * 60);
                 
-                if (filters.lastSeen === '1h' && diffHours > 1) {
-                    return false;
-                }
-                
-                if (filters.lastSeen === '24h' && diffHours > 24) {
-                    return false;
-                }
-                
-                if (filters.lastSeen === 'recently' && diffHours > 24 * 7) {
-                    return false;
+                switch (filters.lastSeen) {
+                    case '1h':
+                        if (diffHours > 1) return false;
+                        break;
+                    case '24h':
+                        if (diffHours > 24) return false;
+                        break;
+                    case 'recently':
+                        if (diffHours > 24 * 7) return false;
+                        break;
                 }
             }
             
             return true;
         });
+
+        if(result.length!=0){
+            return result;
+        }
+
+        alert("Данных нет!");
+        return this.philterdata;
     }
     
     formatLastSeen(lastSeen) {
@@ -189,13 +213,12 @@ export class MainPage {
         }));
     }
     
-    setupEventListeners(){
-
+    setupEventListeners() {
         const collapseButton = this.pageRoot.querySelector('.collapse-button');
         const content = this.pageRoot.querySelector('.change-section-content');
         
         content.style.display = "none";
-        collapseButton.textContent = "▶";
+        collapseButton.textContent = "▶️ ";
         
         collapseButton.addEventListener('click', () => {
             if (content.style.display === "none") {
@@ -203,70 +226,101 @@ export class MainPage {
                 collapseButton.textContent = "🔽";
             } else {
                 content.style.display = "none";
-                collapseButton.textContent = "▶";
+                collapseButton.textContent = "▶️";
             }
         });
         
-        
-        const filterButton = this.pageRoot.querySelector('#filter-button');
-        filterButton.addEventListener('click', this.filterData.bind(this));
+        // Обработчики для кнопок фильтрации
+        document.getElementById('filter-button').addEventListener('click', () => {
+            // Собираем параметры фильтрации
+            const filters = {
+                city: document.getElementById('filter-city').value,
+                sex: document.querySelector('.sex-button.active')?.dataset.value,
+                bdate: document.getElementById('filter-date').value,
+                lastSeen: document.querySelector('.activity-button.active')?.dataset.value
+            };
 
-        // const sbrosButton = this.pageRoot.querySelector('#sbros-button');
-        // sbrosButton.addEventListener('click', ()=>{this.response ='http://localhost:8000/data/get'; this.render(); });
-        document.querySelectorAll('.sex-button, .activity-button').forEach(button => {
-            button.addEventListener('click', function() {
-                // Удаляем активный класс у всех кнопок в группе
-                this.parentNode.querySelectorAll('button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                // Добавляем активный класс только к нажатой кнопке
-                this.classList.add('active');
-            });
+            this.currentFilters = {
+                city: document.getElementById('filter-city').value,
+                sex: document.querySelector('.sex-button.active')?.dataset.value,
+                bdate: document.getElementById('filter-date').value,
+                lastSeen: document.querySelector('.activity-button.active')?.dataset.value
+            };
+            // Фильтруем данные и обновляем отображение
+            this.philterdata = this.filterData(this.maindata, filters);
+            this.render();
         });
         
-        document.getElementById('filter-button').addEventListener('click', function() {
-            const activeSex = document.querySelector('.sex-button.active').dataset.value;
-            const activeActivity = document.querySelector('.activity-button.active').dataset.value;
-            
-            console.log('Выбран пол:', activeSex);
-            console.log('Выбрана активность:', activeActivity);
-            // Здесь можно добавить логику фильтрации
-        });
-        
-        document.getElementById('sbros-button').addEventListener('click', function() {
+        // Обработчик кнопки сброса
+        document.getElementById('sbros-button').addEventListener('click', () => {
             // Сброс всех фильтров
+            this.philterdata = this.maindata;
+            
+            // Сброс UI элементов
             document.querySelectorAll('.button-group button').forEach(btn => {
                 btn.classList.remove('active');
             });
-            // Активируем первые кнопки в каждой группе по умолчанию
-            document.querySelectorAll('.button-group button:first-child').forEach(btn => {
-                btn.classList.add('active');
-            });
-            // Очищаем текстовые поля
             document.querySelectorAll('input[type="text"]').forEach(input => {
                 input.value = '';
             });
+            
+            this.render();
         });
+        
+        // Обработчики для кнопок выбора с возможностью отжатия
+        document.querySelectorAll('.sex-button, .activity-button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                } else {
+                    this.parentNode.querySelectorAll('button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+    }
+
+    wellBeBackByMegadeth() {
+        // Восстанавливаем текстовые поля
+        document.getElementById('filter-city').value = this.currentFilters.city || '';
+        document.getElementById('filter-date').value = this.currentFilters.bdate || '';
+        
+        // Восстанавливаем активные кнопки
+        if (this.currentFilters.sex) {
+            const sexButton = document.querySelector(`.sex-button[data-value="${this.currentFilters.sex}"]`);
+            if (sexButton) {
+                sexButton.classList.add('active');
+            }
+        }
+        
+        if (this.currentFilters.lastSeen) {
+            const activityButton = document.querySelector(`.activity-button[data-value="${this.currentFilters.lastSeen}"]`);
+            if (activityButton) {
+                activityButton.classList.add('active');
+            }
+        }
     }
     async render() {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
 
         const cardsContainer = document.getElementById('cards-container');
-        const data = await this.getData();
+       
         
         if(this.maindata.length === 0){ 
-            this.maindata = data
-            this.philterdata = data
+            const data = await this.getData();
+            this.maindata = data;
+            this.philterdata = data;
+            console.log("Используем VK API", Date.now());
         }
-        console.log(data[0]);
 
-        if (data) {
+        if (this.philterdata.length!=0) {
 
-            // Форматирование времени последнего визита
             
 
-            data.forEach((item, index) => {
+            this.philterdata.forEach((item, index) => {
               
                 const modifiedItem = {
                     // Основная информация
@@ -339,6 +393,7 @@ export class MainPage {
         }
         
         this.setupEventListeners();
+        this.wellBeBackByMegadeth();
         
     }
     
