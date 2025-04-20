@@ -6,9 +6,10 @@ import {GROUP_ID} from "../../modules/consts.js";
 
 export class MainPage {
 
-    response = 'http://localhost:8000/data/get'
     constructor(parent) {
         this.parent = parent;
+        this.maindata = [];
+        this.philterdata = [];
     }
     
     get pageRoot() {
@@ -81,27 +82,57 @@ export class MainPage {
     
    
     
-    filterData() {
-
-        
-        const id_cond = document.getElementById('filter-id').value;
-        const date_cond = document.getElementById('filter-date').value;
-        const title_cond = document.getElementById('filter-title').value;
-        const explanation_cond = document.getElementById('filter-explanation').value;
-        const url_cond = document.getElementById('filter-url').value;
-
-        const queryParams = new URLSearchParams();
-
-        if (id_cond) queryParams.append('id', id_cond);
-        if (date_cond) queryParams.append('date_after', date_cond);
-        if (title_cond) queryParams.append('title_like', title_cond);
-        if (explanation_cond) queryParams.append('explanation_length', explanation_cond);
-        if (url_cond) queryParams.append('url_length', url_cond);
-   
-        this.response = 'http://localhost:8000/data/filter?';
-        this.response+=queryParams.toString();
-       
-        this.render();
+    filterData(data, filters) {
+        return data.filter(member => {
+            // Фильтр по городу
+            if (filters.city && member.city?.id !== filters.city) {
+                return false;
+            }
+            
+            // Фильтр по полу
+            if (filters.sex && member.sex !== filters.sex) {
+                return false;
+            }
+            
+            // Фильтр по дате рождения
+            if (filters.bdate) {
+                if (!member.bdate) return false;
+                
+                const [day, month, year] = member.bdate.split('.');
+                const birthDate = new Date(year || 2000, month - 1, day); // Если год не указан, считаем 2000
+                
+                if (filters.bdate.min && birthDate < new Date(filters.bdate.min)) {
+                    return false;
+                }
+                
+                if (filters.bdate.max && birthDate > new Date(filters.bdate.max)) {
+                    return false;
+                }
+            }
+            
+            // Фильтр по последней активности
+            if (filters.lastSeen) {
+                if (!member.last_seen?.time) return false;
+                
+                const lastSeenTime = member.last_seen.time * 1000; // Переводим в мс
+                const now = Date.now();
+                const diffHours = (now - lastSeenTime) / (1000 * 60 * 60);
+                
+                if (filters.lastSeen === '1h' && diffHours > 1) {
+                    return false;
+                }
+                
+                if (filters.lastSeen === '24h' && diffHours > 24) {
+                    return false;
+                }
+                
+                if (filters.lastSeen === 'recently' && diffHours > 24 * 7) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
     }
     
     formatLastSeen(lastSeen) {
@@ -158,6 +189,65 @@ export class MainPage {
         }));
     }
     
+    setupEventListeners(){
+
+        const collapseButton = this.pageRoot.querySelector('.collapse-button');
+        const content = this.pageRoot.querySelector('.change-section-content');
+        
+        content.style.display = "none";
+        collapseButton.textContent = "▶";
+        
+        collapseButton.addEventListener('click', () => {
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                collapseButton.textContent = "🔽";
+            } else {
+                content.style.display = "none";
+                collapseButton.textContent = "▶";
+            }
+        });
+        
+        
+        const filterButton = this.pageRoot.querySelector('#filter-button');
+        filterButton.addEventListener('click', this.filterData.bind(this));
+
+        // const sbrosButton = this.pageRoot.querySelector('#sbros-button');
+        // sbrosButton.addEventListener('click', ()=>{this.response ='http://localhost:8000/data/get'; this.render(); });
+        document.querySelectorAll('.sex-button, .activity-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Удаляем активный класс у всех кнопок в группе
+                this.parentNode.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Добавляем активный класс только к нажатой кнопке
+                this.classList.add('active');
+            });
+        });
+        
+        document.getElementById('filter-button').addEventListener('click', function() {
+            const activeSex = document.querySelector('.sex-button.active').dataset.value;
+            const activeActivity = document.querySelector('.activity-button.active').dataset.value;
+            
+            console.log('Выбран пол:', activeSex);
+            console.log('Выбрана активность:', activeActivity);
+            // Здесь можно добавить логику фильтрации
+        });
+        
+        document.getElementById('sbros-button').addEventListener('click', function() {
+            // Сброс всех фильтров
+            document.querySelectorAll('.button-group button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Активируем первые кнопки в каждой группе по умолчанию
+            document.querySelectorAll('.button-group button:first-child').forEach(btn => {
+                btn.classList.add('active');
+            });
+            // Очищаем текстовые поля
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+        });
+    }
     async render() {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
@@ -165,6 +255,10 @@ export class MainPage {
         const cardsContainer = document.getElementById('cards-container');
         const data = await this.getData();
         
+        if(this.maindata.length === 0){ 
+            this.maindata = data
+            this.philterdata = data
+        }
         console.log(data[0]);
 
         if (data) {
@@ -237,12 +331,14 @@ export class MainPage {
                 
                 const productCard = new ProductCardComponent(cardsContainer);
                 productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
-              
+                
+                
             });
         } else{
             console.log("NO DATA");
         }
         
+        this.setupEventListeners();
         
     }
     
