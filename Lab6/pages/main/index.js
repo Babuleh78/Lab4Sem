@@ -367,17 +367,14 @@ export class MainPage {
                 bdate: document.getElementById('filter-date').value,
                 lastSeen: document.querySelector('.activity-button.active')?.dataset.value
             };
-            // Фильтруем данные и обновляем отображение
             this.philterdata = this.filterData(this.maindata, filters);
             this.render();
         });
         
-        // Обработчик кнопки сброса
         document.getElementById('sbros-button').addEventListener('click', () => {
-            // Сброс всех фильтров
+       
             this.philterdata = this.maindata;
-            
-            // Сброс UI элементов
+
             document.querySelectorAll('.button-group button').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -449,11 +446,9 @@ export class MainPage {
                     last_name: item.last_name ?? "Фамилия не указана",
                     nickname: item.nickname ?? null,
                     maiden_name: item.maiden_name ?? null,
-                    
-                    // Фотографии (выбираем наилучшее доступное качество)
+
                     photo: item.photo_max_orig ?? item.photo_400 ?? item.photo_200,
                     
-                    // Демографическая информация
                     sex: typeof item.sex === 'number' 
                         ? (item.sex === 2 ? "Мужской" : item.sex === 1 ? "Женский" : "Не указан") 
                         : "Не указан",
@@ -472,14 +467,12 @@ export class MainPage {
                     relatives: item.relatives ? this.formatRelatives(item.relatives) : "Не указано",
                     can_write_private_message: item.can_write_private_message ? "Да" : "Нет",
                     
-                    // Образование и работа
                     education: item.education ? this.formatEducation(item.education) : null,
                     universities: item.universities ?? [],
                     schools: item.schools ?? [],
                     occupation: item.occupation ?? "Не указано",
                     career: item.career ? this.formatCareer(item.career) : "Не указано",
                     
-                    // Интересы
                     activities: item.activities ?? "Не укзаано",
                     interests: item.interests ??  "Не укзаано",
                     music: item.music ??  "Не укзаано",
