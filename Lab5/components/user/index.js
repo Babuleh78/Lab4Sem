@@ -1,6 +1,6 @@
 import { AccordionElement } from "../accordion/index.js";
 
-export class ProductComponent {
+export class UserComponent {
     constructor(parent) {
         this.parent = parent;
     }

@@ -1,5 +1,5 @@
-import { ProductCardComponent } from "../../components/product-card/index.js";
-import { ProductPage } from "../product/index.js";
+import { UserCardComponent } from "../../components/user-card/index.js";
+import { UserPage } from "../user/index.js";
 
 import {ajax} from "../../modules/ajax.js";
 import {urls} from "../../modules/urls.js";
@@ -63,21 +63,21 @@ export class MainPage {
         `;
     }
     
-    // async getData() {
-    //     try {
+    async getData() {
+        try {
             
-    //         const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
             
-    //         const memberIds = apiResponse.response.items.slice(0, 20);
-    //         const usersInfo = await ajax.post(urls.getUltimate(memberIds));
+            const memberIds = apiResponse.response.items.slice(0, 20);
+            const usersInfo = await ajax.post(urls.getUltimate(memberIds));
             
-    //         return usersInfo.response;
+            return usersInfo.response;
             
-    //     } catch (error) {
-    //         console.error('Лошара:', error);
-    //         return [];
-    //     }
-    // }
+        } catch (error) {
+            console.error('Лошара:', error);
+            return [];
+        }
+    }
 
     
     // async getData() {
@@ -143,65 +143,65 @@ export class MainPage {
     //     }
     // }   
 
-    async  getData() {
-        try {
-            const membersResponse = await axios.get('https://api.vk.com/method/groups.getMembers', {
-                params: {
-                    group_id: GROUP_ID,
-                    access_token: ACCESS_TOKEN,
-                    v: '5.131'
-                },
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                }
-            });
+    // async  getData() {
+    //     try {
+    //         const membersResponse = await axios.get('https://api.vk.com/method/groups.getMembers', {
+    //             params: {
+    //                 group_id: GROUP_ID,
+    //                 access_token: ACCESS_TOKEN,
+    //                 v: '5.131'
+    //             },
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //                 'Accept': 'application/json'
+    //             }
+    //         });
 
-            if (membersResponse.data.error) {
-                throw new Error(membersResponse.data.error.error_msg);
-            }
+    //         if (membersResponse.data.error) {
+    //             throw new Error(membersResponse.data.error.error_msg);
+    //         }
 
-            const memberIds = membersResponse.data.response.items.slice(0, 20);
+    //         const memberIds = membersResponse.data.response.items.slice(0, 20);
 
-            const USER_FIELDS = [
-                'photo_200', 'photo_400', 'photo_max_orig',
-                'first_name', 'last_name', 'nickname', 'maiden_name',
-                'sex', 'bdate', 'city', 'country', 'domain',
-                'online', 'last_seen', 'status',
-                'relation', 'relatives', 'can_write_private_message',
-                'education', 'universities', 'schools', 'occupation', 'career',
-                'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about',
-                'counters', 'contacts', 'site', 'skype', 'facebook', 'twitter', 'instagram'
-            ].join(',');
+    //         const USER_FIELDS = [
+    //             'photo_200', 'photo_400', 'photo_max_orig',
+    //             'first_name', 'last_name', 'nickname', 'maiden_name',
+    //             'sex', 'bdate', 'city', 'country', 'domain',
+    //             'online', 'last_seen', 'status',
+    //             'relation', 'relatives', 'can_write_private_message',
+    //             'education', 'universities', 'schools', 'occupation', 'career',
+    //             'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about',
+    //             'counters', 'contacts', 'site', 'skype', 'facebook', 'twitter', 'instagram'
+    //         ].join(',');
 
-            const usersResponse = await axios.get('https://api.vk.com/method/users.get', {
-                params: {
-                    user_ids: memberIds.join(','),
-                    fields: USER_FIELDS,
-                    access_token: ACCESS_TOKEN,
-                    v: '5.131'
-                },
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                }
-            });
+    //         const usersResponse = await axios.get('https://api.vk.com/method/users.get', {
+    //             params: {
+    //                 user_ids: memberIds.join(','),
+    //                 fields: USER_FIELDS,
+    //                 access_token: ACCESS_TOKEN,
+    //                 v: '5.131'
+    //             },
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //                 'Accept': 'application/json'
+    //             }
+    //         });
 
-            if (usersResponse.data.error) {
-                throw new Error(usersResponse.data.error.error_msg);
-            }
+    //         if (usersResponse.data.error) {
+    //             throw new Error(usersResponse.data.error.error_msg);
+    //         }
 
-            return usersResponse.data.response;
+    //         return usersResponse.data.response;
 
-        } catch (error) {
-            console.error('Ошибка при получении данных:', error);
-            return [];
-        }
-    }
+    //     } catch (error) {
+    //         console.error('Ошибка при получении данных:', error);
+    //         return [];
+    //     }
+    // }
 
     clickCard(item, e) {
         const cardId = e.target.dataset.id;
-        const productPage = new ProductPage(this.parent, cardId);
+        const productPage = new UserPage(this.parent, cardId);
         productPage.render(item);
     }
     
@@ -504,7 +504,7 @@ export class MainPage {
                 };
                 
                 
-                const productCard = new ProductCardComponent(cardsContainer);
+                const productCard = new UserCardComponent(cardsContainer);
                 productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
                 
                 

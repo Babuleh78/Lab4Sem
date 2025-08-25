@@ -1,4 +1,4 @@
-export class ProductCardComponent {
+export class UserCardComponent {
     constructor(parent) {
         this.parent = parent;
     }

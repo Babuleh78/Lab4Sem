@@ -1,7 +1,7 @@
 import {BackButtonComponent} from "../../components/back-button/index.js";
 import {MainPage} from "../main/index.js";
-import {ProductComponent} from "../../components/product/index.js";
-export class ProductPage {
+import { UserComponent } from "../../components/user/index.js";
+export class UserPage {
     constructor(parent, id) {
         this.parent = parent
         this.id = id
@@ -46,7 +46,7 @@ export class ProductPage {
         const backButton = new BackButtonComponent(this.pageRoot)
         backButton.render(this.clickBack.bind(this))
 
-        const stock = new ProductComponent(this.pageRoot)
+        const stock = new UserComponent(this.pageRoot)
         stock.render(item)
     }
 }
