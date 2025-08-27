@@ -1,5 +1,6 @@
 import { UserCardComponent } from "../../components/user-card/index.js";
 import { UserPage } from "../user/index.js";
+import { UserEditPage } from "../user_edit/index.js";
 
 import {ajax} from "../../modules/ajax.js";
 import {urls} from "../../modules/urls.js";
@@ -10,12 +11,15 @@ export class MainPage {
     constructor(parent) {
         this.parent = parent;
         this.maindata = [];
+        this.filteredData = [];
         this.currentFilters = {
             city: '',
             sex: null,
             bdate: '',
             lastSeen: null
         };
+        this.storageKey = 'vk_users_data';
+        this.currentEditingIndex = null; 
     }
     
     get pageRoot() {
@@ -44,6 +48,7 @@ export class MainPage {
                     <div class="button-group">
                         <button class="activity-button" data-value="1h">Менее часа назад</button>
                         <button class="activity-button" data-value="24h">Менее суток назад</button>
+                        <button id="refresh-data-button">Обновить данные</button>
                     </div>
                 </div>
                 
@@ -63,148 +68,131 @@ export class MainPage {
         `;
     }
     
-    async getData() {
+    saveDataToStorage(data) {
         try {
+            localStorage.setItem(this.storageKey, JSON.stringify({
+                data: data,
+                timestamp: Date.now(),
+                expires: Date.now() + (24 * 60 * 60 * 1000) 
+            }));
+            console.log('Данные сохранены в localStorage');
+        } catch (error) {
+            console.error('Ошибка сохранения в localStorage:', error);
+        }
+    }
+    
+    getDataFromStorage() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            if (!stored) return null;
             
-            const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            const parsed = JSON.parse(stored);
             
-            const memberIds = apiResponse.response.items.slice(0, 20);
-            const usersInfo = await ajax.post(urls.getUltimate(memberIds));
+            if (Date.now() > parsed.expires) {
+                localStorage.removeItem(this.storageKey);
+                return null;
+            }
             
-            return usersInfo.response;
+            console.log('Данные загружены из localStorage');
+            return parsed.data;
             
         } catch (error) {
-            console.error('Лошара:', error);
-            return [];
+            console.error('Ошибка чтения из localStorage:', error);
+            return null;
         }
     }
 
+    async loadDataFromAPI() {
+        try {
+            console.log('Загрузка данных с VK API...');
+            const apiResponse = await ajax.post(urls.getGroupMembers(GROUP_ID));
+            const memberIds = apiResponse.response.items.slice(0, 20);
+            const usersInfo = await ajax.post(urls.getUltimate(memberIds));
+            
+            this.saveDataToStorage(usersInfo.response);
+            return usersInfo.response;
+            
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+            return [];
+        }
+    }
     
-    // async getData() {
-    //     try {
-    
-    //         const membersUrl = new URL('https://api.vk.com/method/groups.getMembers');
-    //         membersUrl.searchParams.append('group_id', GROUP_ID);
-    //         membersUrl.searchParams.append('access_token', ACCESS_TOKEN);
-    //         membersUrl.searchParams.append('v', '5.131');
-            
-    //         const membersResponse = await fetch(membersUrl.toString(), { //axios boundle
-    //             method: 'GET', 
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //                 'Accept': 'application/json'
-    //             }
-    //         });
-    
-    //         if (!membersResponse.ok) throw new Error('Ошибка сети');
-    //         const membersData = await membersResponse.json();
-            
-    //         if (membersData.error) throw new Error(membersData.error.error_msg);
-            
-    //         const memberIds = membersData.response.items.slice(0, 20);
-    
-    //         const usersUrl = new URL('https://api.vk.com/method/users.get');
+    async getData() {
+        const storedData = this.getDataFromStorage();
+        
+        if (storedData) {
+            return storedData;
+        }
+        
+        return await this.loadDataFromAPI();
+    }
 
-           
-    //         usersUrl.searchParams.append('user_ids', memberIds.join(','));
-    //         const USER_FIELDS = [
-    //             'photo_200', 'photo_400', 'photo_max_orig',
-    //             'first_name', 'last_name', 'nickname', 'maiden_name',
-    //             'sex', 'bdate', 'city', 'country', 'domain',
-    //             'online', 'last_seen', 'status',
-    //             'relation', 'relatives', 'can_write_private_message',
-    //             'education', 'universities', 'schools', 'occupation', 'career',
-    //             'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about',
-    //             'counters', 'contacts', 'site', 'skype', 'facebook', 'twitter', 'instagram'
-    //         ].join(',');
-            
-    //         usersUrl.searchParams.append('fields', USER_FIELDS);
-    //         usersUrl.searchParams.append('access_token', ACCESS_TOKEN);
-    //         usersUrl.searchParams.append('v', '5.131');
-            
-    //         const usersResponse = await fetch(usersUrl.toString(), {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //                 'Accept': 'application/json'
-    //             }
-    //         });
-    
-    //         if (!usersResponse.ok) throw new Error('Ошибка сети');
-    //         const usersData = await usersResponse.json();
-            
-    //         if (usersData.error) throw new Error(usersData.error.error_msg);
-    
-    //         return usersData.response;
-            
-    //     } catch (error) {
-    //         console.error('Ошибка при получении данных:', error);
-    //         return [];
-    //     }
-    // }   
+   
 
-    // async  getData() {
-    //     try {
-    //         const membersResponse = await axios.get('https://api.vk.com/method/groups.getMembers', {
-    //             params: {
-    //                 group_id: GROUP_ID,
-    //                 access_token: ACCESS_TOKEN,
-    //                 v: '5.131'
-    //             },
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //                 'Accept': 'application/json'
-    //             }
-    //         });
-
-    //         if (membersResponse.data.error) {
-    //             throw new Error(membersResponse.data.error.error_msg);
-    //         }
-
-    //         const memberIds = membersResponse.data.response.items.slice(0, 20);
-
-    //         const USER_FIELDS = [
-    //             'photo_200', 'photo_400', 'photo_max_orig',
-    //             'first_name', 'last_name', 'nickname', 'maiden_name',
-    //             'sex', 'bdate', 'city', 'country', 'domain',
-    //             'online', 'last_seen', 'status',
-    //             'relation', 'relatives', 'can_write_private_message',
-    //             'education', 'universities', 'schools', 'occupation', 'career',
-    //             'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about',
-    //             'counters', 'contacts', 'site', 'skype', 'facebook', 'twitter', 'instagram'
-    //         ].join(',');
-
-    //         const usersResponse = await axios.get('https://api.vk.com/method/users.get', {
-    //             params: {
-    //                 user_ids: memberIds.join(','),
-    //                 fields: USER_FIELDS,
-    //                 access_token: ACCESS_TOKEN,
-    //                 v: '5.131'
-    //             },
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //                 'Accept': 'application/json'
-    //             }
-    //         });
-
-    //         if (usersResponse.data.error) {
-    //             throw new Error(usersResponse.data.error.error_msg);
-    //         }
-
-    //         return usersResponse.data.response;
-
-    //     } catch (error) {
-    //         console.error('Ошибка при получении данных:', error);
-    //         return [];
-    //     }
-    // }
 
     clickCard(item, e) {
         const cardId = e.target.dataset.id;
         const productPage = new UserPage(this.parent, cardId);
         productPage.render(item);
     }
+
+    handleEdit(userData, index) {
+        const editPage = new UserEditPage(this.parent, userData, index, this);
+        editPage.render();
+    }
     
+     saveUserData(index, updatedData) {
+        if (index === null || index === undefined) return;
+
+        // Обновляем данные в основном массиве
+        const originalData = this.maindata[index];
+        
+        this.maindata[index] = {
+            ...originalData,
+            first_name: updatedData.first_name,
+            last_name: updatedData.last_name,
+            city: { title: updatedData.city },
+            bdate: updatedData.bdate,
+            sex: updatedData.sex === 'Мужской' ? 2 : updatedData.sex === 'Женский' ? 1 : 0,
+            status: updatedData.status,
+            relation: this.getRelationKey(updatedData.relation),
+            online: updatedData.online === 'Онлайн'
+        };
+
+        if (this.filteredData[index]) {
+            const filteredIndex = this.filteredData.findIndex(item => 
+                item.first_name === originalData.first_name && 
+                item.last_name === originalData.last_name
+            );
+            
+            if (filteredIndex !== -1) {
+                this.filteredData[filteredIndex] = {
+                    ...this.filteredData[filteredIndex],
+                    ...updatedData
+                };
+            }
+        }
+
+        this.saveDataToStorage(this.maindata);
+
+        console.log('Данные пользователя обновлены:', updatedData);
+    }
+
+    getRelationKey(relationText) {
+        const relations = {
+            'Не указано': 0,
+            'Не женат/Не замужем': 1,
+            'Есть друг/Есть подруга': 2,
+            'Помолвлен/Помолвлена': 3,
+            'Женат/Замужем': 4,
+            'Всё сложно': 5,
+            'В активном поиске': 6,
+            'Влюблён/Влюблена': 7,
+            'В гражданском браке': 8
+        };
+        return relations[relationText] || 0;
+    }
    
     
     filterData(data, filters) {
@@ -403,7 +391,7 @@ export class MainPage {
         });
     }
 
-    wellBeBackByMegadeth() {
+    loadSavedFilters() {
         // Восстанавливаем текстовые поля
         document.getElementById('filter-city').value = this.currentFilters.city || '';
         document.getElementById('filter-date').value = this.currentFilters.bdate || '';
@@ -480,32 +468,32 @@ export class MainPage {
                     career: item.career ? this.formatCareer(item.career) : "Не указано",
                     
                     // Интересы
-                    activities: item.activities ?? "Не укзаано",
-                    interests: item.interests ??  "Не укзаано",
-                    music: item.music ??  "Не укзаано",
-                    movies: item.movies ??  "Не укзаано",
-                    tv: item.tv ??  "Не укзаано",
-                    books: item.books ??  "Не укзаано",
-                    games: item.games ??  "Не укзаано",
-                    about: item.about ??  "Не укзаано",
+                    activities: item.activities ?? "Не указано",
+                    interests: item.interests ??  "Не указано",
+                    music: item.music ??  "Не указано",
+                    movies: item.movies ??  "Не указано",
+                    tv: item.tv ??  "Не указано",
+                    books: item.books ??  "Не указано",
+                    games: item.games ??  "Не указано",
+                    about: item.about ??  "Не указано",
                     
                     // Контакты
                     contacts: {
-                        mobile_phone: item.mobile_phone ??  "Не укзаано",
-                        home_phone: item.home_phone ??  "Не укзаано",
-                        site: item.site ??  "Не укзаано",
-                        skype: item.skype ??  "Не укзаано",
-                        facebook: item.facebook ??  "Не укзаано",
-                        twitter: item.twitter ??  "Не укзаано",
-                        instagram: item.instagram ??  "Не укзаано"
+                        mobile_phone: item.mobile_phone ??  "Не указано",
+                        home_phone: item.home_phone ??  "Не указано",
+                        site: item.site ??  "Не указано",
+                        skype: item.skype ??  "Не указано",
+                        facebook: item.facebook ??  "Не указано",
+                        twitter: item.twitter ??  "Не указано",
+                        instagram: item.instagram ??  "Не указано"
                     },
                     
                     
                 };
                 
                 
-                const productCard = new UserCardComponent(cardsContainer);
-                productCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem));
+                const userCard = new UserCardComponent(cardsContainer);
+                userCard.render(modifiedItem, index, this.clickCard.bind(this, modifiedItem), this.handleEdit.bind(this, modifiedItem, index));
                 
                 
             });
@@ -514,7 +502,7 @@ export class MainPage {
         }
         
         this.setupEventListeners();
-        this.wellBeBackByMegadeth();
+        this.loadSavedFilters();
         
     }
     
@@ -523,4 +511,5 @@ export class MainPage {
         const sentences = text.split(/(?<=[.!?])\s+/);
         return sentences.slice(0, 2).join(' '); 
     }
+    
 }

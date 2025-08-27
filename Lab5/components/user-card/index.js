@@ -41,21 +41,30 @@ export class UserCardComponent {
                         data-index="${index}">
                     Подробнее
                 </button>
+                 <button id="edit-card-${index}" class="btn btn-outline-primary w-100 mt-2 >
+                        data-index="${index}">
+                    Редактировать
+                </button>
             </div>
         </div>
         `;
     }
 
-    addListeners(index, listener) {
-        const button = document.getElementById(`click-card-${index}`);
-        if (button) {
-            button.addEventListener("click", listener);
+    addListeners(index, listener1, listener2) {
+        const clickButton = document.getElementById(`click-card-${index}`);
+        if (clickButton) {
+            clickButton.addEventListener("click", listener1);
+        }
+
+        const updateButton = document.getElementById(`edit-card-${index}`);
+        if (updateButton) {
+            updateButton.addEventListener("click", listener2);
         }
     }
 
-    render(data, index, listener) {
+    render(data, index, listener1, listener2) {
         const html = this.getHTML(data, index);
         this.parent.insertAdjacentHTML('beforeend', html);
-        this.addListeners(index, listener);
+        this.addListeners(index, listener1, listener2);
     }
 }
