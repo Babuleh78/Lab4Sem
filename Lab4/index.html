@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Остроумный комментарий</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Primitive API Interface</h1>
+    
+    <section>
+        <h2>1. Получить все данные <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <button onclick="getAllData()">GET /get</button>
+            <pre id="allDataResult">Результат появится здесь...</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h2>2. Получить данные по ID <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="dataId" placeholder="Введите ID карточки">
+            <button onclick="getDataById()">GET /:id</button>
+            <pre id="dataByIdResult">Результат появится здесь...</pre>
+
+        </div>
+    </section>
+    
+    <section>
+        <h2 >3. Добавить новую карточку <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="newId" placeholder="ID">
+            <input type="text" id="newDate" placeholder="Дата">
+            <input type="text" id="newTitle" placeholder="Название">
+            <textarea id="newExplanation" placeholder="Описание"></textarea>
+            <input type="text" id="newUrl" placeholder="URL изображения">
+            <button onclick="addData()">POST /</button>
+            <pre id="addDataResult">Результат появится здесь...</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h2>4. Удалить карточку <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="deleteId" placeholder="Введите ID для удаления">
+            <button onclick="deleteData()">DELETE /:id</button>
+            <pre id="deleteDataResult">Результат появится здесь...</pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>5. Изменить карточку по id <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="changeId" placeholder="ID">
+            <input type="text" id="changeDate" placeholder="Дата">
+            <input type="text" id="changeTitle" placeholder="Название">
+            <textarea id="changeExplanation" placeholder="Описание"></textarea>
+            <input type="text" id="changeUrl" placeholder="URL изображения">
+            <button onclick="changeData()">POST /</button>
+            <pre id="changeDataResult">Результат появится здесь...</pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>6. Применить фильтры <button onclick="toggleChangeSection(this)" class = "collapseButton"> ▼ </button></h2>
+        <div class="changeSectionContent">
+            <input type="text" id="filterId" placeholder="ID">
+            <input type="text" id="filterDate" placeholder="Дата">
+            <input type="text" id="filterTitle" placeholder="Название">
+            <textarea id="filterExplanation" placeholder="Описание"></textarea>
+            <input type="text" id="filterUrl" placeholder="URL изображения">
+            <button onclick="filterData()">Filter</button>
+            <pre id="filterDataResult">Результат появится здесь...</pre>
+        </div>
+    </section>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
